@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProSpine ERP</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{--bg:#040815;--card:#080f26;--card2:#0c1630;--bdr:#13244d;--bdr2:#1e3a6e;--teal:#14b8a6;--teal2:#0f9e8f;--td:rgba(20,184,166,.10);--tg:rgba(20,184,166,.22);--tx:#f1f5f9;--tx2:#94a3b8;--tx3:#475569;--gr:#22c55e;--gd:rgba(34,197,94,.10);--rd:#ef4444;--rr:rgba(239,68,68,.10);--am:#f59e0b;--ad:rgba(245,158,11,.10);--bl:#3b82f6;--bd:rgba(59,130,246,.10);}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:14px}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:4px}::-webkit-scrollbar-thumb:hover{background:var(--teal)}
+.app{display:flex;min-height:100vh}
+.sb{width:230px;background:var(--card);border-right:1px solid var(--bdr);display:flex;flex-direction:column;position:fixed;inset:0 auto 0 0;z-index:100}
+.main{margin-left:230px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+.sb-logo{padding:17px 18px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:10px}
+.sb-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--teal),#0f766e);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(13,148,136,.35)}
+.sb-icon i{color:#fff;font-size:13px}
+.sb-nav{padding:10px;flex:1;overflow-y:auto}
+.ns{font-size:9px;font-weight:700;color:var(--tx3);letter-spacing:.8px;text-transform:uppercase;padding:10px 8px 5px}
+.nb{display:flex;align-items:center;gap:8px;padding:8px 11px;border-radius:7px;cursor:pointer;transition:all .15s;color:var(--tx2);font-size:12.5px;font-weight:500;margin-bottom:2px;border:1px solid transparent;user-select:none;width:100%;background:none;text-align:left;font-family:'Syne',sans-serif}
+.nb:hover{background:var(--card2);color:var(--tx)}.nb.active{background:var(--td);color:var(--teal);border-color:rgba(20,184,166,.18);font-weight:700}
+.nb i{width:15px;text-align:center;font-size:11px;flex-shrink:0}
+.nbadge{margin-left:auto;background:var(--teal);color:#040815;font-size:9px;font-weight:700;padding:1px 6px;border-radius:20px;font-family:'JetBrains Mono',monospace}
+.sb-banks{padding:13px 16px;border-top:1px solid var(--bdr)}
+.brow{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;font-size:11.5px}
+.blbl{color:var(--tx3);font-weight:500}.bval{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx2)}
+.btot{display:flex;justify-content:space-between;align-items:center;padding-top:7px;margin-top:5px;border-top:1px solid var(--bdr)}
+.btot .blbl{color:var(--tx2);font-weight:600;font-size:12px}.btot .bval{color:var(--teal);font-weight:700;font-size:13px}
+.topbar{height:54px;background:var(--card);border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:50}
+.tt{font-size:16px;font-weight:800;color:var(--tx);letter-spacing:-.3px}
+.ts{font-size:10px;color:var(--tx3);margin-top:1px;font-weight:500}
+.tr{display:flex;align-items:center;gap:8px}
+.psel{display:flex;align-items:center;gap:2px;background:var(--bg);border:1px solid var(--bdr);border-radius:7px;padding:3px}
+.pbtn{padding:4px 10px;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--tx3);border:none;background:none;font-family:'Syne',sans-serif}
+.pbtn.active{background:var(--td);color:var(--teal);font-weight:700;border:1px solid rgba(20,184,166,.2)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;border:none;font-family:'Syne',sans-serif}
+.btn-p{background:var(--teal);color:#040815}.btn-p:hover{background:var(--teal2);box-shadow:0 0 12px var(--tg)}
+.btn-g{background:transparent;color:var(--tx2);border:1px solid var(--bdr)}.btn-g:hover{background:var(--card2);color:var(--tx)}
+.btn-d{background:var(--rd);color:#fff}.btn-sm{padding:4px 10px;font-size:11px}
+.page{padding:18px 22px;flex:1}.tab{display:none}.tab.active{display:block}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:10px}
+.chd{padding:13px 17px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.ct{font-size:13px;font-weight:700;color:var(--tx)}.cs{font-size:10.5px;color:var(--tx3);margin-top:2px}
+.cb{padding:17px}
+.kg{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:14px}
+.kc{background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:15px 16px;position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.kc:hover{border-color:rgba(20,184,166,.4);box-shadow:0 0 18px var(--tg)}
+.kb{position:absolute;top:0;left:0;right:0;height:2px;border-radius:10px 10px 0 0}
+.kl{font-size:9.5px;font-weight:700;color:var(--tx3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px}
+.kv{font-size:21px;font-weight:800;color:var(--tx);letter-spacing:-.5px;line-height:1.1;font-family:'JetBrains Mono',monospace}
+.ki{position:absolute;top:14px;right:14px;width:29px;height:29px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.dl{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;margin-top:5px;padding:2px 6px;border-radius:20px;font-family:'JetBrains Mono',monospace}
+.dl.up{background:var(--gd);color:var(--gr)}.dl.dn{background:var(--rr);color:var(--rd)}.dl.ft{background:rgba(148,163,184,.08);color:var(--tx3)}
+.pt{width:100%;height:3px;background:var(--card2);border-radius:10px;overflow:hidden;margin-top:8px}
+.pf{height:100%;border-radius:10px;transition:width .5s ease}
+.cr{display:grid;grid-template-columns:1fr 270px;gap:11px;margin-bottom:14px}
+.twoc{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.thrc{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.foc{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+.leg{display:flex;gap:12px;align-items:center}
+.li{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--tx2)}
+.ld{width:9px;height:9px;border-radius:2px}
+.dw{display:flex;flex-direction:column;align-items:center;gap:11px;padding:13px 17px}
+.sl{width:100%;display:flex;flex-direction:column;gap:6px}
+.si{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:7px;border:1px solid var(--bdr);transition:all .15s}
+.si:hover{background:var(--card2)}
+.sll{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600}
+.sd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sp{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:left;padding:8px 13px;font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;background:var(--card2);border-bottom:1px solid var(--bdr);white-space:nowrap}
+.tbl td{padding:10px 13px;font-size:12.5px;border-bottom:1px solid rgba(19,36,77,.6);color:var(--tx);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}.tbl tbody tr:hover{background:var(--card2)}
+.r{text-align:right}.c{text-align:center}
+.fb{display:flex;align-items:center;gap:8px;padding:11px 17px;border-bottom:1px solid var(--bdr);flex-wrap:wrap}
+.fi,.fs{padding:6px 10px;border-radius:7px;border:1px solid var(--bdr);font-size:12px;font-family:'Syne',sans-serif;color:var(--tx);background:var(--bg);outline:none;transition:border-color .15s}
+.fi:focus,.fs:focus{border-color:var(--teal)}
+.sw{position:relative}.sw input{padding-left:27px;min-width:170px}
+.sw i{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--tx3);font-size:11px}
+.stp{display:flex;border-bottom:1px solid var(--bdr)}
+.sti{flex:1;padding:10px 17px;border-right:1px solid var(--bdr)}
+.sti:last-child{border-right:none}
+.stl{font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.stv{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700}
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:700}
+.bg{background:var(--gd);color:var(--gr)}.br{background:var(--rr);color:var(--rd)}.bt{background:var(--td);color:var(--teal)}.bb{background:var(--bd);color:var(--bl)}.ba{background:var(--ad);color:var(--am)}
+.dtbl{width:100%;border-collapse:collapse}
+.dtbl td{padding:9px 15px;font-size:12.5px;border-bottom:1px solid rgba(19,36,77,.6)}
+.dtbl .dg td{background:var(--card2);font-family:'Syne',sans-serif!important;font-size:9.5px!important;font-weight:700!important;color:var(--tx3)!important;text-transform:uppercase;letter-spacing:.5px;padding:5px 15px!important}
+.dtbl .dt td{font-weight:800!important;font-size:13.5px!important;border-top:1px solid var(--bdr2)!important}
+.dtbl .dh td{background:rgba(20,184,166,.04)}.dtbl .dl2 td{background:rgba(34,197,94,.04)}
+.dtbl td:nth-child(2),.dtbl td:nth-child(3){text-align:right;font-family:'JetBrains Mono',monospace}
+.cc{background:var(--card);border:1px solid var(--bdr);border-radius:10px;overflow:hidden}
+.cch{padding:10px 13px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.ccl{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px}
+.ccp{font-size:10px;font-weight:700;color:var(--teal);background:var(--td);padding:2px 7px;border-radius:20px;border:1px solid rgba(20,184,166,.2)}
+.ccb{padding:11px 13px;display:flex;flex-direction:column;gap:7px}
+.ccr{display:flex;align-items:center;justify-content:space-between}
+.ccrl{font-size:11.5px;color:var(--tx2);font-weight:500}
+.ccv{display:flex;align-items:center;gap:6px}
+.ccc{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--tx)}
+.ccp2{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--tx3);text-decoration:line-through}
+.ccb2{display:inline-flex;align-items:center;gap:2px;font-size:9.5px;font-weight:700;padding:1px 5px;border-radius:20px;font-family:'JetBrains Mono',monospace}
+.ccb2.up{background:var(--gd);color:var(--gr)}.ccb2.dn{background:var(--rr);color:var(--rd)}.ccb2.ft{background:rgba(148,163,184,.08);color:var(--tx3)}
+.cdiv{height:1px;background:var(--bdr);margin:2px 0}
+.ccf{padding:7px 13px;background:var(--card2);border-top:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;font-size:10px}
+.fg{display:flex;flex-direction:column;gap:5px}.fg.s2{grid-column:span 2}.fg.s3{grid-column:span 3}
+.fl{font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px}
+.fc{padding:8px 11px;border-radius:7px;border:1px solid var(--bdr);font-size:12.5px;font-family:'Syne',sans-serif;color:var(--tx);background:var(--bg);outline:none;transition:border-color .15s,box-shadow .15s;width:100%}
+.fc:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--tg)}
+.mov{display:none;position:fixed;inset:0;background:rgba(4,8,21,.8);backdrop-filter:blur(6px);z-index:200;align-items:center;justify-content:center}
+.mov.open{display:flex}
+.mbox{background:var(--card);border-radius:14px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;border:1px solid var(--bdr2)}
+.mhd{padding:17px 21px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.mt{font-size:15px;font-weight:800;color:var(--tx)}.mbody{padding:21px}
+.mft{padding:13px 21px;border-top:1px solid var(--bdr);display:flex;justify-content:flex-end;gap:9px}
+.tc{position:fixed;bottom:21px;right:21px;z-index:1000;display:flex;flex-direction:column;gap:7px}
+.toast{background:var(--card2);color:var(--tx);padding:10px 15px;border-radius:7px;font-size:12.5px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.5);display:flex;align-items:center;gap:9px;animation:su .22s ease;border:1px solid var(--bdr);border-left:3px solid var(--teal)}
+@keyframes su{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.cov{display:none;position:fixed;inset:0;background:rgba(4,8,21,.8);backdrop-filter:blur(6px);z-index:300;align-items:center;justify-content:center}
+.cov.open{display:flex}
+.cbox{background:var(--card);border-radius:10px;padding:24px;max-width:350px;width:100%;text-align:center;border:1px solid var(--bdr2)}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(19,36,77,.6);font-size:12.5px}
+.srow:last-child{border-bottom:none}.slbl{color:var(--tx2);font-weight:500}
+.sval{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px}
+.alrt{display:flex;gap:10px;padding:11px 13px;border-radius:7px;border:1px solid;margin-bottom:9px;font-size:12.5px;font-weight:500}
+.aw{background:var(--ad);border-color:rgba(245,158,11,.25);color:var(--am)}.ad{background:var(--rr);border-color:rgba(239,68,68,.25);color:var(--rd)}.as{background:var(--gd);border-color:rgba(34,197,94,.25);color:var(--gr)}
+.cfi{display:flex;align-items:center;justify-content:space-between;padding:8px 11px;border-radius:7px;border:1px solid var(--bdr);margin-bottom:6px;transition:all .15s}
+.cfi:hover{background:var(--card2)}
+.cfd{background:var(--card2);border:1px solid var(--bdr);padding:3px 7px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--tx2);min-width:46px;text-align:center}
+.pci{display:flex;align-items:center;gap:8px;padding:7px 11px;border-radius:7px;border:1px solid var(--bdr);margin-bottom:5px;font-size:12.5px;color:var(--tx2);transition:all .15s;font-weight:500}
+.pci:hover{background:var(--card2);color:var(--tx)}
+.pcd{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.sind{display:flex;align-items:center;gap:5px;padding:4px 9px;background:var(--card2);border:1px solid var(--bdr);border-radius:7px;font-size:10.5px;color:var(--tx3)}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sb">
+  <div class="sb-logo">
+    <div class="sb-icon"><i class="fa-solid fa-spa"></i></div>
+    <div>
+      <div style="font-size:16px;font-weight:800;color:var(--tx);letter-spacing:-.3px">ProSpine</div>
+      <div style="font-size:9px;color:var(--tx3);font-weight:600;letter-spacing:.5px;text-transform:uppercase">ERP Financeiro</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="ns">Visão Geral</div>
+    <button class="nb active" onclick="showTab('dashboard',this)"><i class="fa-solid fa-chart-line"></i>Dashboard</button>
+    <button class="nb" onclick="showTab('comparativos',this)"><i class="fa-solid fa-code-compare"></i>Comparativos</button>
+    <button class="nb" onclick="showTab('graficos',this)"><i class="fa-solid fa-chart-bar"></i>Gráficos</button>
+    <button class="nb" onclick="showTab('metas',this)"><i class="fa-solid fa-bullseye"></i>Metas & Sócio</button>
+    <button class="nb" onclick="showTab('dre',this)"><i class="fa-solid fa-table-list"></i>DRE</button>
+    <div class="ns">Operações</div>
+    <button class="nb" onclick="showTab('lancamentos',this)"><i class="fa-solid fa-file-invoice-dollar"></i>Lançamentos<span class="nbadge" id="badge-lanc">0</span></button>
+    <button class="nb" onclick="showTab('contas',this)"><i class="fa-solid fa-sitemap"></i>Plano de Contas</button>
+  </nav>
+  <div class="sb-banks">
+    <div class="ns" style="padding:0 0 6px">Saldos</div>
+    <div class="brow"><span class="blbl">Inter PJ</span><span class="bval" id="sb-ipj">—</span></div>
+    <div class="brow"><span class="blbl">Cora PJ</span><span class="bval" id="sb-cpj">—</span></div>
+    <div class="brow"><span class="blbl">Inter PF</span><span class="bval" id="sb-ipf">—</span></div>
+    <div class="brow"><span class="blbl">Caixa</span><span class="bval" id="sb-cx">—</span></div>
+    <div class="btot"><span class="blbl">Consolidado</span><span class="bval" id="sb-tot">—</span></div>
+  </div>
+</aside>
+<div class="main">
+  <header class="topbar">
+    <div><div class="tt" id="pgt">Dashboard Executivo</div><div class="ts" id="pgs">Performance multitemporal · ProSpine</div></div>
+    <div class="tr">
+      <div class="psel">
+        <button class="pbtn" onclick="setP('mes',this)">Mês</button>
+        <button class="pbtn active" onclick="setP('trimestre',this)">Trimestre</button>
+        <button class="pbtn" onclick="setP('semestre',this)">Semestre</button>
+        <button class="pbtn" onclick="setP('ano',this)">Ano</button>
+      </div>
+      <div class="sind" id="sind"><i class="fa-solid fa-circle" style="font-size:7px;color:var(--am)"></i><span id="stxt">Dados locais</span></div>
+      <button class="btn btn-g btn-sm" id="sbtn" onclick="doSync()"><i class="fa-solid fa-rotate"></i>Sync Sheets</button>
+      <button class="btn btn-p" onclick="openM('mlanc')"><i class="fa-solid fa-plus"></i>Novo Lançamento</button>
+    </div>
+  </header>
+  <div class="page">
+    <!-- DASHBOARD -->
+    <div id="tab-dashboard" class="tab active">
+      <div class="kg">
+        <div class="kc"><div class="kb" style="background:var(--teal)"></div><div class="ki" style="background:var(--td);color:var(--teal)"><i class="fa-solid fa-wallet"></i></div><div class="kl">Faturamento Consolidado</div><div class="kv" id="kf">R$ 0</div><div style="display:flex;align-items:center;gap:5px;margin-top:4px"><span class="dl ft" id="kfd"><i class="fa-solid fa-minus"></i> —</span><span style="font-size:9.5px;color:var(--tx3)" id="kfl">vs anterior</span></div><div class="pt"><div class="pf" id="kfb" style="width:0%;background:var(--teal)"></div></div><div style="display:flex;justify-content:space-between;font-size:9px;color:var(--tx3);margin-top:3px;font-family:'JetBrains Mono',monospace"><span>R$0</span><span id="kfm">Meta</span></div></div>
+        <div class="kc"><div class="kb" style="background:var(--gr)"></div><div class="ki" style="background:var(--gd);color:var(--gr)"><i class="fa-solid fa-piggy-bank"></i></div><div class="kl">Lucro Líquido Real</div><div class="kv" id="kl">R$ 0</div><div style="display:flex;align-items:center;gap:5px;margin-top:4px"><span class="dl ft" id="kld"><i class="fa-solid fa-minus"></i> —</span><span style="font-size:9.5px;color:var(--tx3)" id="kll">vs anterior</span></div><div style="font-size:9.5px;color:var(--tx3);margin-top:6px;font-family:'JetBrains Mono',monospace">Margem: <span id="km" style="color:var(--teal)">—</span></div></div>
+        <div class="kc"><div class="kb" style="background:var(--bl)"></div><div class="ki" style="background:var(--bd);color:var(--bl)"><i class="fa-solid fa-stethoscope"></i></div><div class="kl">Receita Clínica (Braço 1)</div><div class="kv" id="kc2">R$ 0</div><div style="display:flex;align-items:center;gap:5px;margin-top:4px"><span class="dl ft" id="kc2d"><i class="fa-solid fa-minus"></i> —</span><span style="font-size:9.5px;color:var(--tx3)">vs anterior</span></div></div>
+        <div class="kc"><div class="kb" style="background:var(--am)"></div><div class="ki" style="background:var(--ad);color:var(--am)"><i class="fa-solid fa-graduation-cap"></i></div><div class="kl">Receita Educacional (Braço 2)</div><div class="kv" id="ke">R$ 0</div><div style="display:flex;align-items:center;gap:5px;margin-top:4px"><span class="dl ft" id="ked"><i class="fa-solid fa-minus"></i> —</span><span style="font-size:9.5px;color:var(--tx3)" id="kep">0% do total</span></div></div>
+      </div>
+      <div class="cr">
+        <div class="card"><div class="chd"><div><div class="ct">Faturamento por Braço</div><div class="cs">Clínico × Educacional + consolidado</div></div><div class="leg"><div class="li"><div class="ld" style="background:var(--teal)"></div>Clínico</div><div class="li"><div class="ld" style="background:var(--bl)"></div>Educação</div><div class="li"><div style="width:12px;height:2px;background:var(--tx2);border-radius:2px"></div>Total</div></div></div><div class="cb" style="padding-top:8px;padding-bottom:8px"><svg id="chart-main" style="width:100%;height:175px;overflow:visible" viewBox="0 0 700 175"></svg></div></div>
+        <div class="card"><div class="chd"><div><div class="ct">Participação por Vertical</div><div class="cs">Composição do faturamento</div></div></div>
+          <div class="dw">
+            <div style="position:relative;width:110px;height:110px;flex-shrink:0">
+              <svg viewBox="0 0 36 36" style="width:100%;height:100%;transform:rotate(-90deg)">
+                <circle cx="18" cy="18" r="15.915" fill="none" stroke="#0c1630" stroke-width="3.5"/>
+                <circle id="dc" cx="18" cy="18" r="15.915" fill="none" stroke="#14b8a6" stroke-width="4" stroke-dasharray="50 100" style="transition:all .5s"/>
+                <circle id="de" cx="18" cy="18" r="15.915" fill="none" stroke="#3b82f6" stroke-width="4" stroke-dasharray="30 100" stroke-dashoffset="-50" style="transition:all .5s"/>
+                <circle id="di" cx="18" cy="18" r="15.915" fill="none" stroke="#f59e0b" stroke-width="4" stroke-dasharray="20 100" stroke-dashoffset="-80" style="transition:all .5s"/>
+              </svg>
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font-size:9px;color:var(--tx3);font-weight:700;text-transform:uppercase">Maior</span><span id="dc2" style="font-size:18px;font-weight:800;color:var(--tx);font-family:'JetBrains Mono',monospace">—</span><span style="font-size:9px;color:var(--teal);font-weight:600">Clínico</span></div>
+            </div>
+            <div class="sl">
+              <div class="si"><div class="sll"><div class="sd" style="background:var(--teal)"></div>Braço 1 Clínico</div><span class="sp" id="sc">—</span></div>
+              <div class="si"><div class="sll"><div class="sd" style="background:var(--bl)"></div>Braço 2 Cursos</div><span class="sp" id="se2">—</span></div>
+              <div class="si"><div class="sll"><div class="sd" style="background:var(--am)"></div>Braço 2 Infoprod.</div><span class="sp" id="si2">—</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="twoc">
+        <div class="card"><div class="chd"><div class="ct">Alertas de Gestão</div></div><div class="cb" id="alertas"></div></div>
+        <div class="card"><div class="chd"><div class="ct">Resumo do Período</div></div><div class="cb">
+          <div class="srow"><span class="slbl">Total lançamentos</span><span class="sval" id="st-l">0</span></div>
+          <div class="srow"><span class="slbl">Entradas</span><span class="sval" style="color:var(--gr)" id="st-e">—</span></div>
+          <div class="srow"><span class="slbl">Saídas</span><span class="sval" style="color:var(--rd)" id="st-s">—</span></div>
+          <div class="srow"><span class="slbl">Saldo do período</span><span class="sval" id="st-sal">—</span></div>
+          <div class="srow"><span class="slbl">Braço 1 (Clínico)</span><span class="sval" style="color:var(--teal)" id="st-b1">—</span></div>
+          <div class="srow"><span class="slbl">Braço 2 (Educação)</span><span class="sval" style="color:var(--bl)" id="st-b2">—</span></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- COMPARATIVOS -->
+    <div id="tab-comparativos" class="tab">
+      <div style="margin-bottom:14px"><div style="font-size:14px;font-weight:800;color:var(--tx)">Release de Resultados</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">MoM · QoQ · HoH · YoY — padrão empresas listadas em bolsa</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px" id="cgrid"></div>
+      <div class="card"><div class="chd"><div><div class="ct">DRE Comparativa — Atual vs Anterior</div><div class="cs">Variação absoluta e relativa por linha</div></div><span class="badge bt">Tempo real</span></div>
+        <div style="overflow-x:auto"><table class="dtbl" style="width:100%"><thead><tr style="background:var(--card2)">
+          <td style="padding:8px 15px;font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;width:42%">Linha</td>
+          <td style="padding:8px 15px;font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:18%" id="wth1">Atual</td>
+          <td style="padding:8px 15px;font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:18%" id="wth2">Anterior</td>
+          <td style="padding:8px 15px;font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:12%">Var. (R$)</td>
+          <td style="padding:8px 15px;font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:10%">%</td>
+        </tr></thead><tbody class="dtbl" id="wbody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- GRÁFICOS -->
+    <div id="tab-graficos" class="tab">
+      <div style="margin-bottom:13px;display:flex;align-items:center;justify-content:space-between">
+        <div><div style="font-size:14px;font-weight:800;color:var(--tx)">Análise Visual</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">Barras por período por braço · Composição de caixa · Tendência de lucro</div></div>
+        <div class="leg"><div class="li"><div class="ld" style="background:var(--teal)"></div>Clínico</div><div class="li"><div class="ld" style="background:var(--bl)"></div>Educação</div><div class="li"><div style="width:12px;height:2px;background:var(--tx2);border-radius:2px"></div>Total</div></div>
+      </div>
+      <div style="font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px"><i class="fa-solid fa-chart-bar" style="color:var(--teal);margin-right:5px"></i>Faturamento por Braço</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px">
+        <div class="card"><div class="chd"><div><div class="ct">Mês a Mês (MoM)</div><div class="cs">Últimos 6 meses</div></div><span class="badge bt" style="font-size:9.5px">MoM</span></div><div class="cb" style="padding-top:8px;padding-bottom:8px"><svg id="g-mom" style="width:100%;height:155px;overflow:visible" viewBox="0 0 520 155"></svg></div></div>
+        <div class="card"><div class="chd"><div><div class="ct">Trimestre a Trimestre (QoQ)</div><div class="cs">Últimos 4 trimestres</div></div><span class="badge bb" style="font-size:9.5px">QoQ</span></div><div class="cb" style="padding-top:8px;padding-bottom:8px"><svg id="g-qoq" style="width:100%;height:155px;overflow:visible" viewBox="0 0 520 155"></svg></div></div>
+        <div class="card"><div class="chd"><div><div class="ct">Semestre a Semestre (HoH)</div><div class="cs">Últimos 4 semestres</div></div><span class="badge ba" style="font-size:9.5px">HoH</span></div><div class="cb" style="padding-top:8px;padding-bottom:8px"><svg id="g-hoh" style="width:100%;height:155px;overflow:visible" viewBox="0 0 520 155"></svg></div></div>
+        <div class="card"><div class="chd"><div><div class="ct">Ano a Ano (YoY)</div><div class="cs">Todos os anos disponíveis</div></div><span class="badge br" style="font-size:9.5px">YoY</span></div><div class="cb" style="padding-top:8px;padding-bottom:8px"><svg id="g-yoy" style="width:100%;height:155px;overflow:visible" viewBox="0 0 520 155"></svg></div></div>
+      </div>
+      <div style="font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px"><i class="fa-solid fa-circle-half-stroke" style="color:var(--teal);margin-right:5px"></i>Composição do Fluxo de Caixa</div>
+      <div class="foc" style="margin-bottom:14px">
+        <div class="card"><div class="chd"><div><div class="ct">Mês</div><div class="cs" id="gd-mom-s">—</div></div></div><div style="padding:11px 13px" id="gd-mom"></div></div>
+        <div class="card"><div class="chd"><div><div class="ct">Trimestre</div><div class="cs" id="gd-qoq-s">—</div></div></div><div style="padding:11px 13px" id="gd-qoq"></div></div>
+        <div class="card"><div class="chd"><div><div class="ct">Semestre</div><div class="cs" id="gd-hoh-s">—</div></div></div><div style="padding:11px 13px" id="gd-hoh"></div></div>
+        <div class="card"><div class="chd"><div><div class="ct">Ano</div><div class="cs" id="gd-yoy-s">—</div></div></div><div style="padding:11px 13px" id="gd-yoy"></div></div>
+      </div>
+      <div style="font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px"><i class="fa-solid fa-arrow-trend-up" style="color:var(--gr);margin-right:5px"></i>Tendência de Lucro Líquido</div>
+      <div class="card"><div class="chd"><div><div class="ct">Evolução do Lucro Líquido</div><div class="cs">Verde = positivo · Vermelho = negativo</div></div></div><div class="cb" style="padding-top:8px;padding-bottom:8px"><svg id="g-trend" style="width:100%;height:145px;overflow:visible" viewBox="0 0 900 145"></svg></div></div>
+    </div>
+
+    <!-- METAS & SÓCIO -->
+    <div id="tab-metas" class="tab">
+
+      <!-- CONFIGURAÇÃO DE METAS -->
+      <div style="margin-bottom:13px;display:flex;align-items:center;justify-content:space-between">
+        <div><div style="font-size:14px;font-weight:800;color:var(--tx)">Metas & Projeção</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">Realizado vs projetado por braço · Mensal e trimestral</div></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600">
+            <span style="display:inline-flex;align-items:center;gap:4px;color:var(--teal)"><span style="width:10px;height:10px;background:var(--teal);border-radius:2px;opacity:.9;display:inline-block"></span>Realizado</span>
+            <span style="display:inline-flex;align-items:center;gap:4px;color:var(--tx3)"><span style="width:10px;height:10px;background:var(--tx3);border-radius:2px;opacity:.4;display:inline-block"></span>Meta</span>
+          </div>
+          <button class="btn btn-g btn-sm" onclick="openMetaConfig()" style="gap:5px"><i class="fa-solid fa-sliders"></i>Definir Metas</button>
+        </div>
+      </div>
+
+      <!-- METAS CONFIG PANEL (hidden by default) -->
+      <div id="meta-config-panel" style="display:none;background:var(--card);border:1px solid var(--bdr2);border-radius:10px;padding:18px;margin-bottom:14px">
+        <div style="font-size:12px;font-weight:700;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:7px"><i class="fa-solid fa-sliders"></i>Configurar Metas Mensais</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px">
+          <div class="fg"><label class="fl">Meta Mensal — Braço 1 (Clínico)</label><input type="number" id="meta-b1" class="fc" placeholder="Ex: 28000" min="0" step="100"></div>
+          <div class="fg"><label class="fl">Meta Mensal — Braço 2 (Educação)</label><input type="number" id="meta-b2" class="fc" placeholder="Ex: 15000" min="0" step="100"></div>
+          <div class="fg"><label class="fl">Meta Mensal — Consolidado</label><input type="number" id="meta-cons" class="fc" placeholder="Ex: 43000" min="0" step="100" readonly style="opacity:.7;cursor:default"></div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn btn-g btn-sm" onclick="closeMetaConfig()">Cancelar</button>
+          <button class="btn btn-p btn-sm" onclick="saveMetas()"><i class="fa-solid fa-check"></i>Salvar Metas</button>
+        </div>
+      </div>
+
+      <!-- KPIs DE PROGRESSO -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:14px" id="meta-kpis"></div>
+
+      <!-- GRÁFICO MENSAL -->
+      <div style="font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px"><i class="fa-solid fa-chart-bar" style="color:var(--teal);margin-right:5px"></i>Realizado vs Meta — Mês a Mês (últimos 6 meses)</div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="chd">
+          <div><div class="ct">Consultório · Ensino · Consolidado</div><div class="cs">3 barras por mês: Braço 1 (turquesa) · Braço 2 (azul) · Consolidado (roxo) · Meta (pontilhado)</div></div>
+          <div style="display:flex;gap:10px;align-items:center;font-size:10.5px;font-weight:600">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--teal)"><span style="width:9px;height:9px;background:var(--teal);border-radius:2px;display:inline-block"></span>Clínico</span>
+            <span style="display:flex;align-items:center;gap:4px;color:var(--bl)"><span style="width:9px;height:9px;background:var(--bl);border-radius:2px;display:inline-block"></span>Educação</span>
+            <span style="display:flex;align-items:center;gap:4px;color:#a78bfa"><span style="width:9px;height:9px;background:#a78bfa;border-radius:2px;display:inline-block"></span>Consolidado</span>
+            <span style="display:flex;align-items:center;gap:4px;color:var(--tx3)"><span style="width:14px;height:2px;background:var(--tx3);border-radius:2px;display:inline-block;opacity:.6;border-top:2px dashed var(--tx3)"></span>Meta</span>
+          </div>
+        </div>
+        <div class="cb" style="padding-top:10px;padding-bottom:10px">
+          <svg id="meta-bar-mes" style="width:100%;height:200px;overflow:visible" viewBox="0 0 900 200"></svg>
+        </div>
+      </div>
+
+      <!-- GRÁFICO TRIMESTRAL -->
+      <div style="font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px"><i class="fa-solid fa-chart-bar" style="color:var(--bl);margin-right:5px"></i>Realizado vs Meta — Trimestre a Trimestre (últimos 4 trimestres)</div>
+      <div class="card" style="margin-bottom:20px">
+        <div class="chd"><div><div class="ct">Consolidado trimestral por braço</div><div class="cs">Meta trimestral = meta mensal × 3</div></div></div>
+        <div class="cb" style="padding-top:10px;padding-bottom:10px">
+          <svg id="meta-bar-tri" style="width:100%;height:200px;overflow:visible" viewBox="0 0 900 200"></svg>
+        </div>
+      </div>
+
+      <!-- PAINEL DO SÓCIO -->
+      <div style="font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px"><i class="fa-solid fa-user-tie" style="color:var(--am);margin-right:5px"></i>Painel do Sócio</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;margin-bottom:14px" id="socio-kpis"></div>
+      <div class="twoc">
+        <div class="card">
+          <div class="chd"><div class="ct">Histórico de Retiradas</div><div class="cs">Pró-labore e dividendos distribuídos</div></div>
+          <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Período</th><th class="r">Pró-labore</th><th class="r">Dividendos</th><th class="r">Total Retirado</th></tr></thead><tbody id="socio-table"></tbody></table></div>
+        </div>
+        <div class="card">
+          <div class="chd"><div class="ct">Capacidade de Distribuição</div><div class="cs">Lucro disponível vs retirado — ano corrente</div></div>
+          <div class="cb">
+            <svg id="socio-chart" style="width:100%;height:180px;overflow:visible" viewBox="0 0 400 180"></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRE -->
+    <div id="tab-dre" class="tab">
+      <div class="card"><div class="chd"><div><div class="ct">DRE — Demonstração de Resultado</div><div class="cs">Regime de competência calculado em tempo real dos lançamentos</div></div><span class="badge bt">Ao vivo</span></div>
+        <div style="overflow-x:auto"><table class="dtbl" style="width:100%"><thead><tr style="background:var(--card2)">
+          <td style="padding:8px 15px;font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;width:55%">Linha</td>
+          <td style="padding:8px 15px;font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:25%">Valor (R$)</td>
+          <td style="padding:8px 15px;font-size:9.5px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;text-align:right;width:20%">% Receita</td>
+        </tr></thead><tbody class="dtbl" id="dre-body"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- LANÇAMENTOS -->
+    <div id="tab-lancamentos" class="tab">
+      <div class="card">
+        <div class="fb">
+          <div class="sw"><i class="fa-solid fa-magnifying-glass"></i><input type="text" class="fi" id="fsearch" placeholder="Buscar..." oninput="renderTx()"></div>
+          <select class="fs" id="ftipo" onchange="renderTx()"><option value="">Todos os tipos</option><option value="entrada">Entradas</option><option value="saida">Saídas</option></select>
+          <select class="fs" id="fcat" onchange="renderTx()"><option value="">Categorias</option></select>
+          <select class="fs" id="fbanco" onchange="renderTx()"><option value="">Todos os bancos</option><option value="Inter PJ">Inter PJ</option><option value="Cora PJ">Cora PJ</option><option value="Inter PF">Inter PF</option><option value="Caixa Físico">Caixa</option></select>
+          <input type="month" class="fi" id="fmes" onchange="renderTx()">
+          <div style="margin-left:auto;display:flex;gap:7px">
+            <button class="btn btn-g btn-sm" onclick="clearF()"><i class="fa-solid fa-xmark"></i>Limpar</button>
+            <button class="btn btn-p btn-sm" onclick="openM('mlanc')"><i class="fa-solid fa-plus"></i>Novo</button>
+          </div>
+        </div>
+        <div class="stp">
+          <div class="sti"><div class="stl">Entradas</div><div class="stv" style="color:var(--gr)" id="sent">—</div></div>
+          <div class="sti"><div class="stl">Saídas</div><div class="stv" style="color:var(--rd)" id="ssai">—</div></div>
+          <div class="sti"><div class="stl">Saldo filtrado</div><div class="stv" id="ssal">—</div></div>
+        </div>
+        <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Data</th><th>Descrição / Cliente</th><th>Categoria</th><th>Conta</th><th class="c">Tipo</th><th class="r">Valor</th><th class="c">⋯</th></tr></thead><tbody id="txbody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- PLANO DE CONTAS -->
+    <div id="tab-contas" class="tab">
+      <div class="twoc">
+        <div class="card"><div class="chd"><div class="ct" style="color:var(--teal)">Receitas (Entradas)</div></div><div class="cb" id="pc-rec"></div></div>
+        <div class="card"><div class="chd"><div class="ct" style="color:var(--rd)">Despesas (Saídas)</div></div><div class="cb" id="pc-desp"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- MODAL LANÇAMENTO -->
+<div class="mov" id="mlanc">
+  <div class="mbox">
+    <div class="mhd"><div class="mt"><i class="fa-solid fa-file-invoice-dollar" style="color:var(--teal);margin-right:8px"></i>Novo Lançamento</div><button class="btn btn-g btn-sm" onclick="closeM('mlanc')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="mbody">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:13px">
+        <div class="fg"><label class="fl">Data *</label><input type="date" id="ld" class="fc"></div>
+        <div class="fg"><label class="fl">Tipo *</label><select id="lt" class="fc"><option value="entrada">Entrada</option><option value="saida">Saída</option></select></div>
+        <div class="fg"><label class="fl">Valor (R$) *</label><input type="number" id="lv" step="0.01" min="0.01" class="fc" placeholder="0,00"></div>
+        <div class="fg s2"><label class="fl">Categoria *</label><select id="lc" class="fc"></select></div>
+        <div class="fg"><label class="fl">Conta *</label><select id="lb" class="fc"><option value="Inter PJ">Inter PJ</option><option value="Cora PJ">Cora PJ</option><option value="Inter PF">Inter PF</option><option value="Caixa Físico">Caixa Físico</option></select></div>
+        <div class="fg s2"><label class="fl">Descrição</label><input type="text" id="ldesc" class="fc" placeholder="Referência..."></div>
+        <div class="fg"><label class="fl">Cliente / Fornecedor</label><input type="text" id="lcli" class="fc" placeholder="Nome..."></div>
+      </div>
+    </div>
+    <div class="mft"><button class="btn btn-g" onclick="closeM('mlanc')">Cancelar</button><button class="btn btn-p" onclick="saveTx()"><i class="fa-solid fa-check"></i>Salvar Lançamento</button></div>
+  </div>
+</div>
+<div class="cov" id="covdel">
+  <div class="cbox">
+    <div style="font-size:26px;color:var(--rd);margin-bottom:10px"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <div style="font-size:15px;font-weight:800;margin-bottom:5px">Confirmar Exclusão</div>
+    <div style="font-size:12.5px;color:var(--tx2);margin-bottom:17px">Este lançamento será removido permanentemente.</div>
+    <div style="display:flex;gap:10px;justify-content:center">
+      <button class="btn btn-g" onclick="closeC()">Cancelar</button>
+      <button class="btn btn-d" onclick="doDel()"><i class="fa-solid fa-trash"></i>Excluir</button>
+    </div>
+  </div>
+</div>
+<div class="tc" id="tc"></div>
+<script>
+// ============================================================
+// CONFIGURAÇÃO DA PLANILHA
+// Nova planilha ProSpine: 1qo9dffzUonOSxEZLe5y77f1f5XmvPdbS5GLjbAjh3_Y
+// Estrutura Lançamentos: Data|Tipo|Categoria|Conta Destino|Cliente|Valor
+// ============================================================
+const SHEET_ID = '1qo9dffzUonOSxEZLe5y77f1f5XmvPdbS5GLjbAjh3_Y';
+const GID_LANC = '1614333558';
+const APPS_URL = null; // Cole aqui a URL do Apps Script quando disponível
+
+const SALDOS_INI = {'Inter PJ':0,'Cora PJ':0,'Inter PF':0,'Caixa Físico':0};
+
+// Plano de contas baseado na nova planilha (imagens 1 e 2)
+const PLANO = {
+  entrada: [
+    'Serviços Clínicos (Consultório) (Faturamento do Braço 1)',
+    'Infoprodutos (Digital) (Faturamento do Braço 2)',
+    'Ensino Presencial (Cursos) (Faturamento do Braço 2)',
+    'Sublocação / Outras Receitas'
+  ],
+  saida: [
+    'Impostos e Taxas',
+    'Insumos e Materiais Clínicos (Custo Variável do Braço 1)',
+    'Custos de Cursos e Eventos (Custo Variável do Braço 2)',
+    'Despesas Fixas e Estrutura (Luz, Aluguel, Internet, Secretária, Contabilista, etc.)',
+    'Marketing e Tráfego Pago',
+    'Retiradas e Sócios (Pró-labore / Dividendos)'
+  ]
+};
+
+const BNK_KEYS = ['Inter PJ','Cora PJ','Inter PF','Caixa Físico'];
+const MN = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const SK = 'prospine_erp_v5';
+
+// Dados junho 2026 da nova planilha (imagem 3)
+const SEED_DATA = [
+  {date:'2026-06-01',tipo:'entrada',categoria:'Serviços Clínicos (Consultório) (Faturamento do Braço 1)',banco:'Inter PJ',cliente:'Marcelo Veiga Beckhausen',desc:'sessão',valor:280,_src:'sheets'},
+  {date:'2026-06-01',tipo:'entrada',categoria:'Serviços Clínicos (Consultório) (Faturamento do Braço 1)',banco:'Inter PJ',cliente:'Roberto Lopes Janisch',desc:'sessão',valor:280,_src:'sheets'},
+  {date:'2026-06-01',tipo:'entrada',categoria:'Serviços Clínicos (Consultório) (Faturamento do Braço 1)',banco:'Inter PJ',cliente:'Diego da Silva Dias',desc:'sessão',valor:1400,_src:'sheets'},
+  {date:'2026-06-01',tipo:'entrada',categoria:'Serviços Clínicos (Consultório) (Faturamento do Braço 1)',banco:'Inter PJ',cliente:'Marina Sperotto Coelho Viana',desc:'sessão',valor:300,_src:'sheets'},
+  {date:'2026-06-01',tipo:'entrada',categoria:'Serviços Clínicos (Consultório) (Faturamento do Braço 1)',banco:'Inter PJ',cliente:'Debora Pauli',desc:'sessão',valor:600,_src:'sheets'},
+  {date:'2026-06-02',tipo:'saida',categoria:'Retiradas e Sócios (Pró-labore / Dividendos)',banco:'Inter PJ',cliente:'FFS',desc:'retirada',valor:22000,_src:'sheets'},
+  {date:'2026-06-02',tipo:'saida',categoria:'Marketing e Tráfego Pago',banco:'Inter PJ',cliente:'Produtora Power',desc:'tráfego pago',valor:1566.67,_src:'sheets'},
+  {date:'2026-06-03',tipo:'entrada',categoria:'Retiradas e Sócios (Pró-labore / Dividendos)',banco:'Inter PJ',cliente:'FFS',desc:'entrada sócios',valor:2000,_src:'sheets'},
+  {date:'2026-06-03',tipo:'saida',categoria:'Despesas Fixas e Estrutura (Luz, Aluguel, Internet, Secretária, Contabilista, etc.)',banco:'Inter PJ',cliente:'Claro',desc:'internet',valor:96.90,_src:'sheets'},
+];
+
+function loadState(){
+  try{
+    const s=localStorage.getItem(SK);
+    if(s){
+      const p=JSON.parse(s);
+      const local=(p.transactions||[]).filter(t=>t._src==='local');
+      return{transactions:[...SEED_DATA.map((t,i)=>({...t,id:'s'+i})),...local].sort((a,b)=>b.date.localeCompare(a.date))};
+    }
+  }catch(e){}
+  return{transactions:SEED_DATA.map((t,i)=>({...t,id:'s'+i})).sort((a,b)=>b.date.localeCompare(a.date))};
+}
+
+let S=loadState(),pendDel=null,ap='trimestre';
+function save(){try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){}}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
+function brl(v){return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v||0)}
+function brlS(v){const a=Math.abs(v||0);return(v<0?'-':'')+(a>=1000?'R$'+(a/1000).toFixed(1)+'k':brl(v))}
+function fmtD(d){if(!d)return'—';const[y,m,dy]=d.split('-');return`${dy}/${m}/${y}`}
+function shortD(d){if(!d)return'';const[,m,dy]=d.split('-');return`${dy}/${m}`}
+function pctC(c,p){return p!==0?((c-p)/Math.abs(p)*100).toFixed(1)+'%':'—'}
+function dCls(c,p){if(p===0)return'ft';return c>p?'up':'dn'}
+function dIco(c,p){if(p===0)return'fa-minus';return c>p?'fa-caret-up':'fa-caret-down'}
+
+function showTab(id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(n=>n.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  const T={dashboard:['Dashboard Executivo','Performance multitemporal · ProSpine'],comparativos:['Release de Resultados','MoM · QoQ · HoH · YoY'],graficos:['Análise Visual','Barras e composição por período'],metas:['Metas, Projeção & Painel do Sócio','Realizado vs projetado por braço · Painel de distribuição'],dre:['DRE — Demonstração de Resultado','Calculado em tempo real'],lancamentos:['Livro Caixa','Registro com filtros avançados'],contas:['Plano de Contas','Categorias da ProSpine']};
+  document.getElementById('pgt').textContent=T[id]?.[0]||id;
+  document.getElementById('pgs').textContent=T[id]?.[1]||'';
+  const r={lancamentos:renderTx,metas:renderMetas,dre:renderDRE,contas:renderContas,comparativos:renderComp,graficos:renderGraficos};
+  if(r[id])r[id]();
+}
+
+function setP(p,btn){ap=p;document.querySelectorAll('.pbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');runAll()}
+function openM(id){if(id==='mlanc'){document.getElementById('ld').value=new Date().toISOString().split('T')[0];updCat();}document.getElementById(id).classList.add('open')}
+function closeM(id){document.getElementById(id).classList.remove('open')}
+function updCat(){const t=document.getElementById('lt').value;document.getElementById('lc').innerHTML=PLANO[t].map(c=>`<option value="${c}">${c}</option>`).join('')}
+
+function saveTx(){
+  const data=document.getElementById('ld').value;
+  const valor=parseFloat(document.getElementById('lv').value);
+  if(!data){toast('Informe a data.','e');return}
+  if(!valor||valor<=0){toast('Informe um valor válido.','e');return}
+  S.transactions.unshift({id:uid(),date:data,tipo:document.getElementById('lt').value,categoria:document.getElementById('lc').value,banco:document.getElementById('lb').value,desc:document.getElementById('ldesc').value||'',cliente:document.getElementById('lcli').value||'—',valor,_src:'local'});
+  save();closeM('mlanc');toast('Lançamento salvo.');runAll();
+}
+
+function askDel(i){pendDel=i;document.getElementById('covdel').classList.add('open')}
+function closeC(){document.getElementById('covdel').classList.remove('open');pendDel=null}
+function doDel(){if(pendDel!==null){S.transactions.splice(pendDel,1);save();closeC();toast('Excluído.');runAll()}}
+
+function toast(msg,t='s'){
+  const el=document.createElement('div');el.className='toast';
+  el.style.borderLeftColor=t==='e'?'var(--rd)':'var(--teal)';
+  el.innerHTML=`<i class="fa-solid ${t==='e'?'fa-circle-exclamation':'fa-circle-check'}" style="color:${t==='e'?'var(--rd)':'var(--teal)'}"></i> ${msg}`;
+  document.getElementById('tc').appendChild(el);setTimeout(()=>el.remove(),3000);
+}
+
+// Categoria helpers — mapeiam para braços
+function isBraco1(cat){return cat.includes('Clínico')||cat.includes('Braço 1')}
+function isBraco2(cat){return cat.includes('Infoproduto')||cat.includes('Ensino')||cat.includes('Braço 2')}
+function isImposto(cat){return cat.includes('Imposto')||cat.includes('Taxa')}
+function isCustVar(cat){return cat.includes('Insumo')||cat.includes('Custo Variável')||cat.includes('Curso')}
+function isFixa(cat){return cat.includes('Fixa')||cat.includes('Estrutura')||cat.includes('Luz')||cat.includes('Aluguel')||cat.includes('Internet')||cat.includes('Secretária')||cat.includes('Contabilista')}
+function isMkt(cat){return cat.includes('Marketing')||cat.includes('Tráfego')}
+function isRet(cat){return cat.includes('Retirada')||cat.includes('Pró-labore')||cat.includes('Dividendo')}
+
+function getPR(period,offset=0){
+  const now=new Date();
+  let months=period==='mes'?1:period==='trimestre'?3:period==='semestre'?6:12;
+  let sm=now.getMonth()-months*offset;
+  let sy=now.getFullYear()+Math.floor(sm/12);
+  sm=((sm%12)+12)%12;
+  const start=new Date(sy,sm-months+1,1);
+  const end=new Date(sy,sm+1,0);
+  return{start,end};
+}
+function getTxs(start,end){return S.transactions.filter(t=>{const d=new Date(t.date);return d>=start&&d<=end})}
+function getPL(period,offset){
+  const{start,end}=getPR(period,offset);
+  if(period==='mes')return MN[start.getMonth()]+'/'+String(start.getFullYear()).slice(2);
+  if(period==='trimestre')return MN[start.getMonth()]+'–'+MN[end.getMonth()]+'/'+String(end.getFullYear()).slice(2);
+  if(period==='semestre')return'S'+(end.getMonth()<6?1:2)+'/'+end.getFullYear();
+  return String(end.getFullYear());
+}
+
+function calcDRE(txs){
+  const d={b1:0,b2info:0,b2ens:0,outro:0,imp:0,custVar:0,fix:0,mkt:0,ret:0};
+  txs.forEach(t=>{
+    const v=t.valor,e=t.tipo==='entrada';
+    if(e){
+      if(isBraco1(t.categoria))d.b1+=v;
+      else if(t.categoria.includes('Infoproduto'))d.b2info+=v;
+      else if(t.categoria.includes('Ensino')||t.categoria.includes('Curso'))d.b2ens+=v;
+      else d.outro+=v;
+    }else{
+      if(isImposto(t.categoria))d.imp+=v;
+      else if(isCustVar(t.categoria))d.custVar+=v;
+      else if(isFixa(t.categoria))d.fix+=v;
+      else if(isMkt(t.categoria))d.mkt+=v;
+      else if(isRet(t.categoria))d.ret+=v;
+      else d.fix+=v;
+    }
+  });
+  // Corrige entradas que são retiradas (ex: entrada sócios é receita não operacional)
+  // Se categoria de entrada inclui Retirada, move para outro
+  txs.forEach(t=>{
+    if(t.tipo==='entrada'&&isRet(t.categoria)){d.b1-=0;d.outro+=t.valor;}
+  });
+  const rb=d.b1+d.b2info+d.b2ens+d.outro;
+  const rl=rb-d.imp,mc=rl-d.custVar,eb=mc-d.fix,ll=eb-d.mkt,sr=ll-d.ret;
+  const pct=v=>rb>0?((v/rb)*100).toFixed(1)+'%':'0,0%';
+  return{...d,rb,rl,mc,eb,ll,sr,pct};
+}
+
+function calcBanks(){
+  const b={...SALDOS_INI};
+  S.transactions.forEach(t=>{
+    const k=t.banco;
+    if(!(k in b))b[k]=0;
+    if(t.tipo==='entrada')b[k]+=t.valor;else b[k]-=t.valor;
+  });
+  return b;
+}
+
+// ---- RENDER DASHBOARD ----
+function renderDash(){
+  const{start,end}=getPR(ap,0);
+  const{start:ps,end:pe}=getPR(ap,1);
+  const txs=getTxs(start,end),prev=getTxs(ps,pe);
+  const d=calcDRE(txs),dp=calcDRE(prev);
+  const banks=calcBanks();
+  BNK_KEYS.forEach(k=>{
+    const id='sb-'+k.toLowerCase().replace(/ /g,'-').replace(/í/g,'i');
+    const el=document.getElementById(id);
+    if(el)el.textContent=brl(banks[k]||0);
+  });
+  document.getElementById('sb-ipj').textContent=brl(banks['Inter PJ']||0);
+  document.getElementById('sb-cpj').textContent=brl(banks['Cora PJ']||0);
+  document.getElementById('sb-ipf').textContent=brl(banks['Inter PF']||0);
+  document.getElementById('sb-cx').textContent=brl(banks['Caixa Físico']||0);
+  document.getElementById('sb-tot').textContent=brl(Object.values(banks).reduce((a,b)=>a+b,0));
+  const setKPI=(vid,did,lid,c,p)=>{
+    document.getElementById(vid).textContent=brl(c);
+    const el=document.getElementById(did);el.className='dl '+dCls(c,p);
+    el.innerHTML=`<i class="fa-solid ${dIco(c,p)}"></i> ${pctC(c,p)}`;
+    if(lid)document.getElementById(lid).textContent='vs '+getPL(ap,1);
+  };
+  setKPI('kf','kfd','kfl',d.rb,dp.rb);
+  const meta=ap==='mes'?30000:ap==='trimestre'?90000:ap==='semestre'?180000:360000;
+  document.getElementById('kfb').style.width=Math.min((d.rb/meta)*100,100)+'%';
+  document.getElementById('kfm').textContent='Meta: '+brlS(meta);
+  setKPI('kl','kld','kll',d.ll,dp.ll);
+  const mp=d.rb>0?((d.ll/d.rb)*100).toFixed(1):0;
+  document.getElementById('km').textContent=mp+'%';
+  document.getElementById('km').style.color=parseFloat(mp)>=20?'var(--gr)':parseFloat(mp)>=0?'var(--am)':'var(--rd)';
+  setKPI('kc2','kc2d',null,d.b1,dp.b1);
+  const edu=d.b2info+d.b2ens,edp=dp.b2info+dp.b2ens;
+  document.getElementById('ke').textContent=brl(edu);
+  const eel=document.getElementById('ked');eel.className='dl '+dCls(edu,edp);
+  eel.innerHTML=`<i class="fa-solid ${dIco(edu,edp)}"></i> ${pctC(edu,edp)}`;
+  document.getElementById('kep').textContent=(d.rb>0?((edu/d.rb)*100).toFixed(0):0)+'% do total';
+  document.getElementById('badge-lanc').textContent=S.transactions.length;
+  const ent=txs.filter(t=>t.tipo==='entrada').reduce((a,t)=>a+t.valor,0);
+  const sai=txs.filter(t=>t.tipo==='saida').reduce((a,t)=>a+t.valor,0);
+  document.getElementById('st-l').textContent=txs.length;
+  document.getElementById('st-e').textContent=brl(ent);
+  document.getElementById('st-s').textContent=brl(sai);
+  const se=document.getElementById('st-sal');se.textContent=brl(ent-sai);se.style.color=(ent-sai)>=0?'var(--gr)':'var(--rd)';
+  document.getElementById('st-b1').textContent=brl(d.b1);
+  document.getElementById('st-b2').textContent=brl(edu);
+  const al=[];
+  if(parseFloat(mp)<20&&d.rb>0)al.push({t:'d',m:`Margem líquida em ${mp}% — abaixo de 20%.`});
+  if(d.mkt>0&&d.rb>0&&(d.mkt/d.rb)>0.15)al.push({t:'w',m:'Marketing acima de 15% da receita.'});
+  if(d.fix>0&&d.rb>0&&(d.fix/d.rb)>0.35)al.push({t:'w',m:'Despesas fixas >35% — pressão no EBITDA.'});
+  if(!al.length)al.push({t:'s',m:'Indicadores dentro dos parâmetros operacionais.'});
+  document.getElementById('alertas').innerHTML=al.map(a=>`<div class="alrt a${a.t}"><i class="fa-solid ${a.t==='d'?'fa-circle-exclamation':a.t==='w'?'fa-triangle-exclamation':'fa-circle-check'}"></i><span>${a.m}</span></div>`).join('');
+  const tot=d.rb||1,pC=(d.b1/tot*100),pE=((d.b2ens)/tot*100),pI=((d.b2info+d.outro)/tot*100);
+  document.getElementById('dc').setAttribute('stroke-dasharray',`${pC} 100`);
+  document.getElementById('de').setAttribute('stroke-dasharray',`${pE} 100`);
+  document.getElementById('de').setAttribute('stroke-dashoffset',`-${pC}`);
+  document.getElementById('di').setAttribute('stroke-dasharray',`${pI} 100`);
+  document.getElementById('di').setAttribute('stroke-dashoffset',`-${pC+pE}`);
+  document.getElementById('dc2').textContent=pC.toFixed(0)+'%';
+  document.getElementById('sc').textContent=pC.toFixed(0)+'%';
+  document.getElementById('se2').textContent=pE.toFixed(0)+'%';
+  document.getElementById('si2').textContent=pI.toFixed(0)+'%';
+  drawBar('chart-main',txs,ap,700,175);
+}
+
+// ---- BARRAS ----
+function groupTxs(txs,period){
+  const g={};
+  txs.forEach(t=>{
+    const dd=new Date(t.date);
+    let k;
+    if(period==='mes')k=t.date.slice(0,7);
+    else if(period==='trimestre')k=dd.getFullYear()+'-Q'+Math.ceil((dd.getMonth()+1)/3);
+    else if(period==='semestre')k=dd.getFullYear()+'-S'+(dd.getMonth()<6?1:2);
+    else k=String(dd.getFullYear());
+    if(!g[k])g[k]={c:0,e:0};
+    if(t.tipo==='entrada'){if(isBraco1(t.categoria))g[k].c+=t.valor;else g[k].e+=t.valor;}
+  });
+  return g;
+}
+
+function drawBar(svgId,txs,period,W,H){
+  const svg=document.getElementById(svgId);if(!svg)return;svg.innerHTML='';
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const pad={t:14,r:13,b:32,l:44},cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+  const g=groupTxs(txs,period);
+  const lim=period==='mes'?6:period==='trimestre'?4:period==='semestre'?4:3;
+  const keys=Object.keys(g).sort().slice(-lim);
+  if(!keys.length){svg.innerHTML=`<text x="${W/2}" y="${H/2}" text-anchor="middle" fill="#475569" font-size="12" font-family="Syne">Sem dados</text>`;return;}
+  const cV=keys.map(k=>g[k].c),eV=keys.map(k=>g[k].e),tV=keys.map((_,i)=>cV[i]+eV[i]);
+  const maxV=Math.max(...tV,1)*1.18;
+  const xS=i=>pad.l+(cW/keys.length)*i+cW/keys.length/2,yS=v=>pad.t+cH-(v/maxV)*cH;
+  const defs=document.createElementNS("http://www.w3.org/2000/svg","defs");
+  defs.innerHTML=`<linearGradient id="ag-${svgId}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#14b8a6" stop-opacity="0.14"/><stop offset="100%" stop-color="#14b8a6" stop-opacity="0"/></linearGradient>`;
+  svg.appendChild(defs);
+  for(let i=0;i<=4;i++){
+    const y=pad.t+(cH/4)*i,v=maxV-(maxV/4)*i;
+    const l=document.createElementNS("http://www.w3.org/2000/svg","line");
+    l.setAttribute('x1',pad.l);l.setAttribute('y1',y);l.setAttribute('x2',W-pad.r);l.setAttribute('y2',y);
+    l.setAttribute('stroke','#13244d');l.setAttribute('stroke-width','0.8');svg.appendChild(l);
+    const t=document.createElementNS("http://www.w3.org/2000/svg","text");
+    t.setAttribute('x',pad.l-6);t.setAttribute('y',y+4);t.setAttribute('fill','#475569');t.setAttribute('font-size','9');t.setAttribute('text-anchor','end');t.setAttribute('font-family','JetBrains Mono');
+    t.textContent=v>=1000?(v/1000).toFixed(0)+'k':v.toFixed(0);svg.appendChild(t);
+  }
+  const bW=Math.min((cW/keys.length)*0.26,22);
+  keys.forEach((k,i)=>{
+    const x=xS(i),ch=(cV[i]/maxV)*cH,eh=(eV[i]/maxV)*cH;
+    if(ch>0){const r=document.createElementNS("http://www.w3.org/2000/svg","rect");r.setAttribute('x',x-bW-2);r.setAttribute('y',pad.t+cH-ch);r.setAttribute('width',bW);r.setAttribute('height',ch);r.setAttribute('fill','#14b8a6');r.setAttribute('rx','3');r.setAttribute('opacity','0.88');svg.appendChild(r);}
+    if(eh>0){const r=document.createElementNS("http://www.w3.org/2000/svg","rect");r.setAttribute('x',x+2);r.setAttribute('y',pad.t+cH-eh);r.setAttribute('width',bW);r.setAttribute('height',eh);r.setAttribute('fill','#3b82f6');r.setAttribute('rx','3');r.setAttribute('opacity','0.88');svg.appendChild(r);}
+    let lbl;
+    if(period==='mes'){const[y2,m]=k.split('-');lbl=MN[parseInt(m)-1]+'/'+y2.slice(2);}
+    else if(period==='trimestre'){const[y2,q]=k.split('-');lbl=q+'/'+y2.slice(2);}
+    else if(period==='semestre'){const[y2,s]=k.split('-');lbl=s+'/'+y2.slice(2);}
+    else lbl=k;
+    const lb=document.createElementNS("http://www.w3.org/2000/svg","text");
+    lb.setAttribute('x',x);lb.setAttribute('y',H-pad.b+13);lb.setAttribute('fill','#94a3b8');lb.setAttribute('font-size','9.5');lb.setAttribute('text-anchor','middle');lb.setAttribute('font-family','Syne');
+    lb.textContent=lbl;svg.appendChild(lb);
+  });
+  const pts=keys.map((_,i)=>({x:xS(i),y:yS(tV[i])}));
+  if(pts.length>1){
+    const ap2=document.createElementNS("http://www.w3.org/2000/svg","path");
+    let pd=`M ${pts[0].x} ${pad.t+cH}`;pts.forEach(p=>pd+=` L ${p.x} ${p.y}`);pd+=` L ${pts[pts.length-1].x} ${pad.t+cH} Z`;
+    ap2.setAttribute('d',pd);ap2.setAttribute('fill',`url(#ag-${svgId})`);svg.appendChild(ap2);
+    const pl=document.createElementNS("http://www.w3.org/2000/svg","polyline");
+    pl.setAttribute('points',pts.map(p=>`${p.x},${p.y}`).join(' '));pl.setAttribute('fill','none');pl.setAttribute('stroke','#cbd5e1');pl.setAttribute('stroke-width','1.8');svg.appendChild(pl);
+    pts.forEach(p=>{const dc=document.createElementNS("http://www.w3.org/2000/svg","circle");dc.setAttribute('cx',p.x);dc.setAttribute('cy',p.y);dc.setAttribute('r','2.8');dc.setAttribute('fill','#040815');dc.setAttribute('stroke','#14b8a6');dc.setAttribute('stroke-width','1.8');svg.appendChild(dc);});
+  }
+}
+
+function renderDRE(){
+  const{start,end}=getPR(ap,0);
+  const d=calcDRE(getTxs(start,end));
+  const rows=[
+    {g:'1. RECEITA BRUTA'},
+    {l:'Braço 1 — Serviços Clínicos',c:d.b1,p:d.pct(d.b1),sub:true},
+    {l:'Braço 2 — Ensino Presencial',c:d.b2ens,p:d.pct(d.b2ens),sub:true},
+    {l:'Braço 2 — Infoprodutos',c:d.b2info,p:d.pct(d.b2info),sub:true},
+    {l:'Outras Receitas',c:d.outro,p:d.pct(d.outro),sub:true},
+    {l:'(=) RECEITA BRUTA',c:d.rb,p:'100,0%',tot:true,cls:'dh',col:'var(--teal)'},
+    {g:'2. IMPOSTOS E DEDUÇÕES'},
+    {l:'Impostos e Taxas',c:-d.imp,p:d.pct(d.imp),sub:true,col:'var(--rd)'},
+    {l:'(=) RECEITA OPERACIONAL LÍQUIDA',c:d.rl,p:d.pct(d.rl),tot:true},
+    {g:'3. CUSTOS OPERACIONAIS VARIÁVEIS'},
+    {l:'Insumos Clínicos + Custos Cursos',c:-d.custVar,p:d.pct(d.custVar),sub:true,col:'var(--rd)'},
+    {l:'(=) MARGEM DE CONTRIBUIÇÃO',c:d.mc,p:d.pct(d.mc),tot:true,cls:'dh',col:d.mc>=0?'var(--teal)':'var(--rd)'},
+    {g:'4. DESPESAS FIXAS E ESTRUTURA'},
+    {l:'Aluguel + Utilidades + Pessoal Adm.',c:-d.fix,p:d.pct(d.fix),sub:true,col:'var(--rd)'},
+    {l:'(=) EBITDA OPERACIONAL',c:d.eb,p:d.pct(d.eb),tot:true,cls:'dh',col:d.eb>=0?'var(--teal)':'var(--rd)'},
+    {g:'5. MARKETING E TRÁFEGO PAGO'},
+    {l:'Tráfego Pago + Agência + Ferramentas',c:-d.mkt,p:d.pct(d.mkt),sub:true,col:'var(--rd)'},
+    {l:'(=) LUCRO LÍQUIDO REAL',c:d.ll,p:d.pct(d.ll),tot:true,cls:'dl2',col:d.ll>=0?'var(--gr)':'var(--rd)',bold:true},
+    {g:'6. RETIRADAS E SÓCIOS'},
+    {l:'Pró-labore + Dividendos',c:-d.ret,p:d.pct(d.ret),sub:true,col:'var(--am)'},
+    {l:'(=) CAIXA RETIDO — Reserva/Reinvestimento',c:d.sr,p:d.pct(d.sr),tot:true,cls:'dh',col:d.sr>=0?'var(--teal)':'var(--rd)',bold:true},
+  ];
+  document.getElementById('dre-body').innerHTML=rows.map(r=>{
+    if(r.g)return`<tr class="dg"><td colspan="3">${r.g}</td></tr>`;
+    const vc=r.col||(r.c>=0?'var(--tx)':'var(--rd)'),fw=r.bold?'800':'500',pl=r.sub?'26px':'15px';
+    return`<tr class="${r.tot?'dt':''} ${r.cls||''}"><td style="padding-left:${pl};font-weight:${fw};font-size:12.5px;color:${r.tot?'var(--tx)':'var(--tx2)'}">${r.l}</td><td style="color:${vc};font-weight:${fw};text-align:right;font-family:'JetBrains Mono',monospace;font-size:12px">${r.c<0?'('+brl(Math.abs(r.c))+')':brl(r.c)}</td><td style="color:var(--tx3);font-size:11px;text-align:right">${r.p||''}</td></tr>`;
+  }).join('');
+}
+
+function renderComp(){
+  const pds=['mes','trimestre','semestre','ano'];
+  const lbls={mes:'MoM — Mês a Mês',trimestre:'QoQ — Trimestre a Trimestre',semestre:'HoH — Semestre a Semestre',ano:'YoY — Ano a Ano'};
+  const shs={mes:'MoM',trimestre:'QoQ',semestre:'HoH',ano:'YoY'};
+  const grid=document.getElementById('cgrid');grid.innerHTML='';
+  pds.forEach(p=>{
+    const r0=getPR(p,0),r1=getPR(p,1);
+    const d0=calcDRE(getTxs(r0.start,r0.end)),d1=calcDRE(getTxs(r1.start,r1.end));
+    const lbl0=getPL(p,0),lbl1=getPL(p,1);
+    const mkR=(label,c,pv)=>{
+      const cls=dCls(c,pv),pcc=pctC(c,pv),ico=c>=pv?'▲':'▼';
+      return`<div class="ccr"><span class="ccrl">${label}</span><div class="ccv"><span class="ccp2">${brlS(pv)}</span><span class="ccc">${brlS(c)}</span><span class="ccb2 ${cls}">${ico} ${pcc}</span></div></div>`;
+    };
+    grid.innerHTML+=`<div class="cc">
+      <div class="cch"><span class="ccl">${lbls[p]}</span><span class="ccp">${shs[p]}</span></div>
+      <div class="ccb">
+        ${mkR('Faturamento Total',d0.rb,d1.rb)}<div class="cdiv"></div>
+        ${mkR('Braço 1 — Clínico',d0.b1,d1.b1)}
+        ${mkR('Braço 2 — Educação',d0.b2ens+d0.b2info,d1.b2ens+d1.b2info)}<div class="cdiv"></div>
+        ${mkR('EBITDA',d0.eb,d1.eb)}
+        ${mkR('Lucro Líquido',d0.ll,d1.ll)}
+      </div>
+      <div class="ccf"><span style="color:var(--tx3);font-weight:600">Atual</span><span style="color:var(--teal);font-weight:700">${lbl0}</span><span style="color:var(--tx3);font-weight:600">Anterior</span><span style="color:var(--tx3)">${lbl1}</span></div>
+    </div>`;
+  });
+  const r0=getPR(ap,0),r1=getPR(ap,1);
+  const d0=calcDRE(getTxs(r0.start,r0.end)),d1=calcDRE(getTxs(r1.start,r1.end));
+  document.getElementById('wth1').textContent=getPL(ap,0);
+  document.getElementById('wth2').textContent=getPL(ap,1);
+  const wfR=[
+    {g:'1. RECEITA BRUTA'},{l:'Braço 1 Clínico',c:d0.b1,p:d1.b1,sub:true},{l:'Braço 2 Educação',c:d0.b2ens+d0.b2info,p:d1.b2ens+d1.b2info,sub:true},{l:'Outras',c:d0.outro,p:d1.outro,sub:true},
+    {l:'(=) RECEITA BRUTA',c:d0.rb,p:d1.rb,tot:true,cls:'dh',col:'var(--teal)'},
+    {g:'2. IMPOSTOS'},{l:'Impostos e Taxas',c:-d0.imp,p:-d1.imp,sub:true},
+    {l:'(=) RECEITA LÍQUIDA',c:d0.rl,p:d1.rl,tot:true},
+    {g:'3. CUSTOS VARIÁVEIS'},{l:'Insumos + Cursos',c:-d0.custVar,p:-d1.custVar,sub:true},
+    {l:'(=) MARGEM',c:d0.mc,p:d1.mc,tot:true,cls:'dh',col:d0.mc>=0?'var(--teal)':'var(--rd)'},
+    {g:'4. DESPESAS FIXAS'},{l:'Estrutura',c:-d0.fix,p:-d1.fix,sub:true},
+    {l:'(=) EBITDA',c:d0.eb,p:d1.eb,tot:true,cls:'dh',col:d0.eb>=0?'var(--teal)':'var(--rd)'},
+    {g:'5. MARKETING'},{l:'Tráfego + Agência',c:-d0.mkt,p:-d1.mkt,sub:true},
+    {l:'(=) LUCRO LÍQUIDO',c:d0.ll,p:d1.ll,tot:true,cls:'dl2',col:d0.ll>=0?'var(--gr)':'var(--rd)',bold:true},
+    {g:'6. RETIRADAS'},{l:'Pró-labore + Dividendos',c:-d0.ret,p:-d1.ret,sub:true},
+    {l:'(=) CAIXA RETIDO',c:d0.sr,p:d1.sr,tot:true,cls:'dh',col:d0.sr>=0?'var(--teal)':'var(--rd)',bold:true},
+  ];
+  document.getElementById('wbody').innerHTML=wfR.map(r=>{
+    if(r.g)return`<tr class="dg"><td colspan="5">${r.g}</td></tr>`;
+    const va=r.c-r.p,vp=pctC(r.c,r.p);
+    const vc=r.col||(r.c>=0?'var(--tx)':'var(--rd)'),fw=r.bold?'800':'500',pl=r.sub?'24px':'15px';
+    const disp=v=>v<0?'('+brl(Math.abs(v))+')':brl(v);
+    return`<tr class="${r.tot?'dt':''} ${r.cls||''}">
+      <td style="padding-left:${pl};font-weight:${fw};color:${r.tot?'var(--tx)':'var(--tx2)'};font-size:12.5px">${r.l}</td>
+      <td style="text-align:right;color:${vc};font-weight:${fw};font-family:'JetBrains Mono',monospace;font-size:12px">${disp(r.c)}</td>
+      <td style="text-align:right;color:var(--tx3);font-family:'JetBrains Mono',monospace;font-size:12px">${disp(r.p)}</td>
+      <td style="text-align:right;color:${va>=0?'var(--gr)':'var(--rd)'};font-family:'JetBrains Mono',monospace;font-size:11px">${va>=0?'+':''}${brl(va)}</td>
+      <td style="text-align:right"><span class="ccb2 ${va>=0?'up':'dn'}">${va>=0?'▲':'▼'} ${vp}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderGraficos(){
+  drawBar('g-mom',S.transactions,'mes',520,155);
+  drawBar('g-qoq',S.transactions,'trimestre',520,155);
+  drawBar('g-hoh',S.transactions,'semestre',520,155);
+  drawBar('g-yoy',S.transactions,'ano',520,155);
+  const drawDonut=(bodyId,subId,period)=>{
+    const sub=document.getElementById(subId);if(sub)sub.textContent=getPL(period,0);
+    const cont=document.getElementById(bodyId);if(!cont)return;
+    const{start,end}=getPR(period,0);
+    const txs=getTxs(start,end);
+    const ent=txs.filter(t=>t.tipo==='entrada').reduce((a,t)=>a+t.valor,0);
+    const sai=txs.filter(t=>t.tipo==='saida').reduce((a,t)=>a+t.valor,0);
+    if(!ent&&!sai){cont.innerHTML=`<div style="text-align:center;padding:10px;color:var(--tx3);font-size:11px">Sem dados</div>`;return;}
+    const cats={};
+    txs.filter(t=>t.tipo==='entrada').forEach(t=>{
+      const cat=isBraco1(t.categoria)?'Braço 1':isBraco2(t.categoria)?'Braço 2':'Outros';
+      cats[cat]=(cats[cat]||0)+t.valor;
+    });
+    const cc={'Braço 1':'#14b8a6','Braço 2':'#3b82f6','Outros':'#94a3b8'};
+    const tot=ent||1;let off=0;
+    const arcs=Object.keys(cats).map(c=>{const pct=cats[c]/tot*100;const a={c,pct,off,col:cc[c]||'#94a3b8'};off+=pct;return a;});
+    const saldo=ent-sai;
+    cont.innerHTML=`<svg viewBox="0 0 36 36" style="width:80px;height:80px;display:block;margin:0 auto;transform:rotate(-90deg)">
+      <circle cx="18" cy="18" r="15.915" fill="none" stroke="#0c1630" stroke-width="3.5"/>
+      ${arcs.map(a=>`<circle cx="18" cy="18" r="15.915" fill="none" stroke="${a.col}" stroke-width="4" stroke-dasharray="${a.pct} 100" stroke-dashoffset="${-a.off}"/>`).join('')}
+    </svg>
+    <div style="text-align:center;margin:6px 0 8px">
+      <div style="font-size:10px;color:var(--tx3)">Saldo</div>
+      <div style="font-size:13px;font-weight:800;color:${saldo>=0?'var(--gr)':'var(--rd)'};font-family:'JetBrains Mono',monospace">${brlS(saldo)}</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:10px">
+      <span style="color:var(--gr);font-weight:700;font-family:'JetBrains Mono',monospace">+${brlS(ent)}</span>
+      <span style="color:var(--rd);font-weight:700;font-family:'JetBrains Mono',monospace">-${brlS(sai)}</span>
+    </div>
+    <div style="border-top:1px solid var(--bdr);padding-top:6px">
+      ${Object.keys(cats).map(c=>`<div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:10px"><span style="display:flex;align-items:center;gap:4px;color:var(--tx2)"><span style="width:6px;height:6px;border-radius:50%;background:${cc[c]};display:inline-block"></span>${c}</span><span style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--tx)">${(cats[c]/tot*100).toFixed(0)}%</span></div>`).join('')}
+    </div>`;
+  };
+  drawDonut('gd-mom','gd-mom-s','mes');
+  drawDonut('gd-qoq','gd-qoq-s','trimestre');
+  drawDonut('gd-hoh','gd-hoh-s','semestre');
+  drawDonut('gd-yoy','gd-yoy-s','ano');
+  // Tendência lucro
+  const svg=document.getElementById('g-trend');if(!svg)return;svg.innerHTML='';
+  const monthly={};
+  S.transactions.forEach(t=>{
+    const m=t.date.slice(0,7);if(!monthly[m])monthly[m]={b1:0,b2:0,outro:0,imp:0,custVar:0,fix:0,mkt:0,ret:0};
+    const v=t.valor,g2=monthly[m];
+    if(t.tipo==='entrada'){if(isBraco1(t.categoria))g2.b1+=v;else if(isBraco2(t.categoria))g2.b2+=v;else g2.outro+=v;}
+    else{if(isImposto(t.categoria))g2.imp+=v;else if(isCustVar(t.categoria))g2.custVar+=v;else if(isFixa(t.categoria))g2.fix+=v;else if(isMkt(t.categoria))g2.mkt+=v;else if(isRet(t.categoria))g2.ret+=v;else g2.fix+=v;}
+  });
+  const mkeys=Object.keys(monthly).sort();
+  if(mkeys.length<1){svg.innerHTML=`<text x="450" y="72" text-anchor="middle" fill="#475569" font-size="12" font-family="Syne">Insira mais lançamentos para visualizar tendência</text>`;return;}
+  const lucros=mkeys.map(k=>{const m=monthly[k],rb=m.b1+m.b2+m.outro,rl=rb-m.imp,eb=rl-m.custVar-m.fix,ll=eb-m.mkt;return ll;});
+  const W=900,H=145,pad={t:13,r:13,b:26,l:54},cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+  const maxL=Math.max(...lucros,1)*1.2,minL=Math.min(...lucros,0)*1.2,range=(maxL-minL)||1;
+  const xS=i=>pad.l+(mkeys.length>1?cW/(mkeys.length-1)*i:cW/2),yS=v=>pad.t+cH-((v-minL)/range)*cH,zero=yS(0);
+  for(let i=0;i<=4;i++){
+    const y=pad.t+(cH/4)*i,v=maxL-(maxL-minL)/4*i;
+    const l=document.createElementNS("http://www.w3.org/2000/svg","line");l.setAttribute('x1',pad.l);l.setAttribute('y1',y);l.setAttribute('x2',W-pad.r);l.setAttribute('y2',y);l.setAttribute('stroke','#13244d');l.setAttribute('stroke-width','0.8');svg.appendChild(l);
+    const t=document.createElementNS("http://www.w3.org/2000/svg","text");t.setAttribute('x',pad.l-6);t.setAttribute('y',y+4);t.setAttribute('fill','#475569');t.setAttribute('font-size','9');t.setAttribute('text-anchor','end');t.setAttribute('font-family','JetBrains Mono');t.textContent=v>=1000?(v/1000).toFixed(0)+'k':v>=0?v.toFixed(0):'('+Math.abs(v).toFixed(0)+')';svg.appendChild(t);
+  }
+  const zl=document.createElementNS("http://www.w3.org/2000/svg","line");zl.setAttribute('x1',pad.l);zl.setAttribute('y1',zero);zl.setAttribute('x2',W-pad.r);zl.setAttribute('y2',zero);zl.setAttribute('stroke','#1e3a6e');zl.setAttribute('stroke-width','1.2');zl.setAttribute('stroke-dasharray','5,4');svg.appendChild(zl);
+  const pts=mkeys.map((_,i)=>({x:xS(i),y:yS(lucros[i]),v:lucros[i]}));
+  const defs2=document.createElementNS("http://www.w3.org/2000/svg","defs");
+  defs2.innerHTML=`<linearGradient id="glp" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.3"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient><linearGradient id="gln" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.3"/></linearGradient>`;
+  svg.appendChild(defs2);
+  if(pts.length>1){
+    const pp=document.createElementNS("http://www.w3.org/2000/svg","path");let pd=`M ${pts[0].x} ${zero}`;pts.forEach(p=>pd+=` L ${p.x} ${Math.min(p.y,zero)}`);pd+=` L ${pts[pts.length-1].x} ${zero} Z`;pp.setAttribute('d',pd);pp.setAttribute('fill','url(#glp)');svg.appendChild(pp);
+    const np=document.createElementNS("http://www.w3.org/2000/svg","path");let pd2=`M ${pts[0].x} ${zero}`;pts.forEach(p=>pd2+=` L ${p.x} ${Math.max(p.y,zero)}`);pd2+=` L ${pts[pts.length-1].x} ${zero} Z`;np.setAttribute('d',pd2);np.setAttribute('fill','url(#gln)');svg.appendChild(np);
+    const pl=document.createElementNS("http://www.w3.org/2000/svg","polyline");pl.setAttribute('points',pts.map(p=>`${p.x},${p.y}`).join(' '));pl.setAttribute('fill','none');pl.setAttribute('stroke','#22c55e');pl.setAttribute('stroke-width','2');svg.appendChild(pl);
+  }
+  mkeys.forEach((k,i)=>{const[,m]=k.split('-');const lb=document.createElementNS("http://www.w3.org/2000/svg","text");lb.setAttribute('x',xS(i));lb.setAttribute('y',H-4);lb.setAttribute('fill','#475569');lb.setAttribute('font-size','9');lb.setAttribute('text-anchor','middle');lb.setAttribute('font-family','Syne');lb.textContent=MN[parseInt(m)-1];svg.appendChild(lb);});
+  pts.forEach(p=>{const dc=document.createElementNS("http://www.w3.org/2000/svg","circle");dc.setAttribute('cx',p.x);dc.setAttribute('cy',p.y);dc.setAttribute('r','2.8');dc.setAttribute('fill','#040815');dc.setAttribute('stroke',p.v>=0?'#22c55e':'#ef4444');dc.setAttribute('stroke-width','1.8');svg.appendChild(dc);});
+}
+
+// ---- METAS CONFIG ----
+function loadMetas(){
+  try{const m=localStorage.getItem('ps_metas');if(m)return JSON.parse(m);}catch(e){}
+  return{b1:28000,b2:15000};
+}
+function saveMetas(){
+  const b1=parseFloat(document.getElementById('meta-b1').value)||0;
+  const b2=parseFloat(document.getElementById('meta-b2').value)||0;
+  localStorage.setItem('ps_metas',JSON.stringify({b1,b2}));
+  closeMetaConfig();toast('Metas salvas.');renderMetas();
+}
+function openMetaConfig(){
+  const m=loadMetas();
+  document.getElementById('meta-b1').value=m.b1;
+  document.getElementById('meta-b2').value=m.b2;
+  document.getElementById('meta-cons').value=m.b1+m.b2;
+  document.getElementById('meta-b1').addEventListener('input',()=>{
+    const b1=parseFloat(document.getElementById('meta-b1').value)||0;
+    const b2=parseFloat(document.getElementById('meta-b2').value)||0;
+    document.getElementById('meta-cons').value=b1+b2;
+  });
+  document.getElementById('meta-b2').addEventListener('input',()=>{
+    const b1=parseFloat(document.getElementById('meta-b1').value)||0;
+    const b2=parseFloat(document.getElementById('meta-b2').value)||0;
+    document.getElementById('meta-cons').value=b1+b2;
+  });
+  document.getElementById('meta-config-panel').style.display='block';
+}
+function closeMetaConfig(){document.getElementById('meta-config-panel').style.display='none';}
+
+// ---- RENDER METAS ----
+function renderMetas(){
+  const metas=loadMetas();
+  const metaCons=metas.b1+metas.b2;
+  const now=new Date();
+
+  // KPIs do mês atual
+  const mesAtual=now.toISOString().slice(0,7);
+  const txsMes=S.transactions.filter(t=>t.date.startsWith(mesAtual));
+  const d=calcDRE(txsMes);
+  const realB1=d.b1,realB2=d.b2ens+d.b2info,realCons=realB1+realB2;
+  const pctB1=metas.b1>0?Math.min((realB1/metas.b1)*100,100):0;
+  const pctB2=metas.b2>0?Math.min((realB2/metas.b2)*100,100):0;
+  const pctCons=metaCons>0?Math.min((realCons/metaCons)*100,100):0;
+
+  const kpiCard=(label,real,meta,pct,color)=>`
+    <div class="kc" style="cursor:default">
+      <div class="kb" style="background:${color}"></div>
+      <div class="kl">${label}</div>
+      <div class="kv" style="font-size:18px">${brl(real)}</div>
+      <div style="font-size:10px;color:var(--tx3);margin-top:3px;font-family:'JetBrains Mono',monospace">Meta: ${brl(meta)}</div>
+      <div class="pt" style="margin-top:8px"><div class="pf" style="width:${pct}%;background:${color}"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:9.5px;margin-top:4px;font-family:'JetBrains Mono',monospace">
+        <span style="color:${pct>=100?'var(--gr)':pct>=70?'var(--am)':'var(--rd)'};font-weight:700">${pct.toFixed(0)}% da meta</span>
+        <span style="color:var(--tx3)">${brl(meta-real)>0&&real<meta?'faltam '+brl(meta-real):'✓ atingida'}</span>
+      </div>
+    </div>`;
+
+  document.getElementById('meta-kpis').innerHTML=
+    kpiCard('Braço 1 — Clínico (mês atual)',realB1,metas.b1,pctB1,'var(--teal)')+
+    kpiCard('Braço 2 — Educação (mês atual)',realB2,metas.b2,pctB2,'var(--bl)')+
+    kpiCard('Consolidado (mês atual)',realCons,metaCons,pctCons,'#a78bfa');
+
+  // Gráfico mensal — últimos 6 meses
+  drawMetaBar('meta-bar-mes','mes',6,metas,900,200);
+  // Gráfico trimestral — últimos 4 trimestres
+  drawMetaBar('meta-bar-tri','trimestre',4,metas,900,200);
+
+  // Painel do sócio
+  renderSocio(metas);
+}
+
+function drawMetaBar(svgId,period,limit,metas,W,H){
+  const svg=document.getElementById(svgId);if(!svg)return;svg.innerHTML='';
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const pad={t:16,r:16,b:36,l:52},cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+
+  // Build period keys
+  const now=new Date();
+  const keys=[];
+  for(let i=limit-1;i>=0;i--){
+    if(period==='mes'){
+      const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+      keys.push(d.toISOString().slice(0,7));
+    } else {
+      const d=new Date(now.getFullYear(),now.getMonth()-i*3,1);
+      const q=Math.ceil((d.getMonth()+1)/3);
+      keys.push(d.getFullYear()+'-Q'+q);
+    }
+  }
+
+  // Calc realized per period
+  const realized=keys.map(k=>{
+    let txs;
+    if(period==='mes'){
+      txs=S.transactions.filter(t=>t.date.startsWith(k));
+    } else {
+      const[y,q]=k.split('-Q');const qn=parseInt(q);
+      const startM=(qn-1)*3,endM=qn*3-1;
+      txs=S.transactions.filter(t=>{const d=new Date(t.date);return d.getFullYear()===parseInt(y)&&d.getMonth()>=startM&&d.getMonth()<=endM;});
+    }
+    const d=calcDRE(txs);
+    return{b1:d.b1,b2:d.b2ens+d.b2info,cons:d.b1+d.b2ens+d.b2info};
+  });
+
+  const mult=period==='mes'?1:3;
+  const metaB1=metas.b1*mult,metaB2=metas.b2*mult,metaCons=(metas.b1+metas.b2)*mult;
+  const allVals=[...realized.map(r=>r.cons),metaCons];
+  const maxV=Math.max(...allVals,1)*1.2;
+  const xS=i=>pad.l+(cW/keys.length)*i+cW/keys.length/2;
+  const yS=v=>pad.t+cH-(v/maxV)*cH;
+  const colW=cW/keys.length;
+  const bW=Math.min(colW*0.17,18);
+  const gap=2;
+
+  // Grid lines
+  const defs=document.createElementNS("http://www.w3.org/2000/svg","defs");
+  defs.innerHTML='';svg.appendChild(defs);
+  for(let i=0;i<=4;i++){
+    const y=pad.t+(cH/4)*i,v=maxV-(maxV/4)*i;
+    const l=document.createElementNS("http://www.w3.org/2000/svg","line");
+    l.setAttribute('x1',pad.l);l.setAttribute('y1',y);l.setAttribute('x2',W-pad.r);l.setAttribute('y2',y);
+    l.setAttribute('stroke','#13244d');l.setAttribute('stroke-width','0.8');svg.appendChild(l);
+    const t=document.createElementNS("http://www.w3.org/2000/svg","text");
+    t.setAttribute('x',pad.l-6);t.setAttribute('y',y+4);t.setAttribute('fill','#475569');t.setAttribute('font-size','9');t.setAttribute('text-anchor','end');t.setAttribute('font-family','JetBrains Mono');
+    t.textContent=v>=1000?(v/1000).toFixed(0)+'k':v.toFixed(0);svg.appendChild(t);
+  }
+
+  // Bars per period
+  keys.forEach((k,i)=>{
+    const x=xS(i),r=realized[i];
+    const hB1=(r.b1/maxV)*cH,hB2=(r.b2/maxV)*cH,hCons=(r.cons/maxV)*cH;
+    const hMB1=(metaB1/maxV)*cH,hMB2=(metaB2/maxV)*cH,hMCons=(metaCons/maxV)*cH;
+    const drawBar=(cx,h,col,opacity=0.9)=>{if(h<=0)return;const rr=document.createElementNS("http://www.w3.org/2000/svg","rect");rr.setAttribute('x',cx);rr.setAttribute('y',pad.t+cH-h);rr.setAttribute('width',bW);rr.setAttribute('height',h);rr.setAttribute('fill',col);rr.setAttribute('rx','3');rr.setAttribute('opacity',opacity);svg.appendChild(rr);};
+    const drawMeta=(cx,h)=>{if(h<=0)return;const line=document.createElementNS("http://www.w3.org/2000/svg","line");const my=pad.t+cH-h;line.setAttribute('x1',cx);line.setAttribute('y1',my);line.setAttribute('x2',cx+bW);line.setAttribute('y2',my);line.setAttribute('stroke','#94a3b8');line.setAttribute('stroke-width','1.5');line.setAttribute('stroke-dasharray','3,2');svg.appendChild(line);};
+    // B1 (teal)
+    const x1=x-bW*1.5-gap*1.5;
+    drawBar(x1,hB1,'#14b8a6');drawMeta(x1,hMB1);
+    // B2 (blue)
+    const x2=x-bW/2;
+    drawBar(x2,hB2,'#3b82f6');drawMeta(x2,hMB2);
+    // Cons (purple)
+    const x3=x+bW/2+gap;
+    drawBar(x3,hCons,'#a78bfa');drawMeta(x3,hMCons);
+
+    // Label
+    let lbl;
+    if(period==='mes'){const[y2,m]=k.split('-');lbl=MN[parseInt(m)-1]+'/'+y2.slice(2);}
+    else{const[y2,q]=k.split('-');lbl=q+'/'+y2.slice(2);}
+    const lb=document.createElementNS("http://www.w3.org/2000/svg","text");
+    lb.setAttribute('x',x);lb.setAttribute('y',H-pad.b+14);lb.setAttribute('fill','#94a3b8');lb.setAttribute('font-size','9.5');lb.setAttribute('text-anchor','middle');lb.setAttribute('font-family','Syne');
+    lb.textContent=lbl;svg.appendChild(lb);
+  });
+}
+
+// ---- PAINEL DO SÓCIO ----
+function renderSocio(metas){
+  const now=new Date();
+  const anoAtual=now.getFullYear().toString();
+
+  // Todos os lançamentos do ano atual
+  const txsAno=S.transactions.filter(t=>t.date.startsWith(anoAtual));
+  const dAno=calcDRE(txsAno);
+
+  // Retiradas separadas
+  const prolabore=txsAno.filter(t=>t.tipo==='saida'&&t.categoria.includes('Pró-labore')).reduce((a,t)=>a+t.valor,0);
+  const dividendos=txsAno.filter(t=>t.tipo==='saida'&&(t.categoria.includes('Dividendo')||t.categoria.includes('Retirada'))).reduce((a,t)=>a+t.valor,0);
+  const totalRetirado=prolabore+dividendos;
+  const lucroDisponivel=Math.max(dAno.ll,0);
+  const caixaRetido=dAno.sr;
+  const pctDistribuido=lucroDisponivel>0?Math.min((totalRetirado/lucroDisponivel)*100,100):0;
+
+  document.getElementById('socio-kpis').innerHTML=`
+    <div class="kc" style="cursor:default">
+      <div class="kb" style="background:var(--am)"></div>
+      <div class="kl">Total Retirado (${anoAtual})</div>
+      <div class="kv" style="font-size:18px;color:var(--am)">${brl(totalRetirado)}</div>
+      <div style="font-size:10px;color:var(--tx3);margin-top:3px;font-family:'JetBrains Mono',monospace">Pró-labore: ${brl(prolabore)} · Dividendos: ${brl(dividendos)}</div>
+    </div>
+    <div class="kc" style="cursor:default">
+      <div class="kb" style="background:var(--gr)"></div>
+      <div class="kl">Lucro Líquido Gerado (${anoAtual})</div>
+      <div class="kv" style="font-size:18px;color:var(--gr)">${brl(lucroDisponivel)}</div>
+      <div style="font-size:10px;color:var(--tx3);margin-top:3px;font-family:'JetBrains Mono',monospace">${pctDistribuido.toFixed(0)}% distribuído · ${(100-pctDistribuido).toFixed(0)}% retido</div>
+    </div>
+    <div class="kc" style="cursor:default">
+      <div class="kb" style="background:var(--teal)"></div>
+      <div class="kl">Caixa Retido (${anoAtual})</div>
+      <div class="kv" style="font-size:18px;color:${caixaRetido>=0?'var(--teal)':'var(--rd)'}">${brl(caixaRetido)}</div>
+      <div style="font-size:10px;color:var(--tx3);margin-top:3px;font-family:'JetBrains Mono',monospace">${caixaRetido>=0?'Disponível para reinvestimento':'Negativo — atenção'}</div>
+    </div>`;
+
+  // Tabela por mês
+  const meses=[];
+  for(let i=0;i<now.getMonth()+1;i++){
+    const mk=now.getFullYear()+'-'+(i+1).toString().padStart(2,'0');
+    const txsM=S.transactions.filter(t=>t.date.startsWith(mk));
+    const pl=txsM.filter(t=>t.tipo==='saida'&&t.categoria.includes('Pró-labore')).reduce((a,t)=>a+t.valor,0);
+    const dv=txsM.filter(t=>t.tipo==='saida'&&(t.categoria.includes('Dividendo')||t.categoria.includes('Retirada'))).reduce((a,t)=>a+t.valor,0);
+    if(pl||dv) meses.push({mk,pl,dv,tot:pl+dv});
+  }
+
+  const tbody=document.getElementById('socio-table');
+  if(!meses.length){
+    tbody.innerHTML=`<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--tx3)">Nenhuma retirada registrada em ${anoAtual}</td></tr>`;
+  } else {
+    tbody.innerHTML=meses.map(m=>{
+      const[y,mo]=m.mk.split('-');
+      return`<tr>
+        <td style="font-weight:600">${MN[parseInt(mo)-1]}/${y.slice(2)}</td>
+        <td class="r" style="font-family:'JetBrains Mono',monospace;color:var(--am)">${m.pl?brl(m.pl):'—'}</td>
+        <td class="r" style="font-family:'JetBrains Mono',monospace;color:var(--am)">${m.dv?brl(m.dv):'—'}</td>
+        <td class="r" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--am)">${brl(m.tot)}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Gráfico de capacidade (donut simples)
+  const svg=document.getElementById('socio-chart');if(!svg)return;svg.innerHTML='';
+  const W=400,H=180;
+  if(lucroDisponivel===0){svg.innerHTML=`<text x="200" y="90" text-anchor="middle" fill="#475569" font-size="13" font-family="Syne">Sem lucro registrado no período</text>`;return;}
+  const pctR=Math.min(pctDistribuido/100,1);
+  const pctK=1-pctR;
+  const cx=120,cy=90,r=65;
+  // background circle
+  const bg=document.createElementNS("http://www.w3.org/2000/svg","circle");
+  bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);bg.setAttribute('r',r);bg.setAttribute('fill','none');bg.setAttribute('stroke','#0c1630');bg.setAttribute('stroke-width','14');svg.appendChild(bg);
+  // retained arc
+  if(pctK>0){
+    const arc=document.createElementNS("http://www.w3.org/2000/svg","circle");
+    arc.setAttribute('cx',cx);arc.setAttribute('cy',cy);arc.setAttribute('r',r);arc.setAttribute('fill','none');arc.setAttribute('stroke','#14b8a6');arc.setAttribute('stroke-width','14');
+    arc.setAttribute('stroke-dasharray',`${pctK*2*Math.PI*r} ${2*Math.PI*r}`);arc.setAttribute('stroke-dashoffset','0');arc.setAttribute('transform',`rotate(-90 ${cx} ${cy})`);arc.setAttribute('opacity','0.9');svg.appendChild(arc);
+  }
+  // distributed arc
+  if(pctR>0){
+    const arc2=document.createElementNS("http://www.w3.org/2000/svg","circle");
+    arc2.setAttribute('cx',cx);arc2.setAttribute('cy',cy);arc2.setAttribute('r',r);arc2.setAttribute('fill','none');arc2.setAttribute('stroke','#f59e0b');arc2.setAttribute('stroke-width','14');
+    arc2.setAttribute('stroke-dasharray',`${pctR*2*Math.PI*r} ${2*Math.PI*r}`);arc2.setAttribute('stroke-dashoffset',`${-pctK*2*Math.PI*r}`);arc2.setAttribute('transform',`rotate(-90 ${cx} ${cy})`);arc2.setAttribute('opacity','0.9');svg.appendChild(arc2);
+  }
+  // center text
+  const t1=document.createElementNS("http://www.w3.org/2000/svg","text");t1.setAttribute('x',cx);t1.setAttribute('y',cy-8);t1.setAttribute('text-anchor','middle');t1.setAttribute('fill','#f1f5f9');t1.setAttribute('font-size','18');t1.setAttribute('font-weight','800');t1.setAttribute('font-family','JetBrains Mono');t1.textContent=pctDistribuido.toFixed(0)+'%';svg.appendChild(t1);
+  const t2=document.createElementNS("http://www.w3.org/2000/svg","text");t2.setAttribute('x',cx);t2.setAttribute('y',cy+10);t2.setAttribute('text-anchor','middle');t2.setAttribute('fill','#94a3b8');t2.setAttribute('font-size','10');t2.setAttribute('font-family','Syne');t2.textContent='distribuído';svg.appendChild(t2);
+  // Legend
+  const legX=cx+r+22;
+  const items=[{col:'#f59e0b',lbl:'Retirado',val:brl(totalRetirado)},{col:'#14b8a6',lbl:'Retido',val:brl(Math.max(lucroDisponivel-totalRetirado,0))}];
+  items.forEach((it,i)=>{
+    const y=cy-16+i*30;
+    const dot=document.createElementNS("http://www.w3.org/2000/svg","rect");dot.setAttribute('x',legX);dot.setAttribute('y',y-8);dot.setAttribute('width',10);dot.setAttribute('height',10);dot.setAttribute('rx','3');dot.setAttribute('fill',it.col);svg.appendChild(dot);
+    const lb=document.createElementNS("http://www.w3.org/2000/svg","text");lb.setAttribute('x',legX+16);lb.setAttribute('y',y);lb.setAttribute('fill','#94a3b8');lb.setAttribute('font-size','11');lb.setAttribute('font-family','Syne');lb.textContent=it.lbl;svg.appendChild(lb);
+    const vl=document.createElementNS("http://www.w3.org/2000/svg","text");vl.setAttribute('x',legX+16);vl.setAttribute('y',y+14);vl.setAttribute('fill','#f1f5f9');vl.setAttribute('font-size','11');vl.setAttribute('font-weight','700');vl.setAttribute('font-family','JetBrains Mono');vl.textContent=it.val;svg.appendChild(vl);
+  });
+}
+
+function renderTx(){
+  const search=(document.getElementById('fsearch')?.value||'').toLowerCase();
+  const tipo=document.getElementById('ftipo')?.value||'';
+  const cat=document.getElementById('fcat')?.value||'';
+  const banco=document.getElementById('fbanco')?.value||'';
+  const mes=document.getElementById('fmes')?.value||'';
+  let fl=S.transactions.filter(t=>{
+    if(tipo&&t.tipo!==tipo)return false;
+    if(cat&&t.categoria!==cat)return false;
+    if(banco&&t.banco!==banco)return false;
+    if(mes&&!t.date.startsWith(mes))return false;
+    if(search&&![t.cliente,t.desc,t.categoria].some(v=>v?.toLowerCase().includes(search)))return false;
+    return true;
+  });
+  const ent=fl.filter(t=>t.tipo==='entrada').reduce((a,t)=>a+t.valor,0);
+  const sai=fl.filter(t=>t.tipo==='saida').reduce((a,t)=>a+t.valor,0);
+  const sal=ent-sai;
+  document.getElementById('sent').textContent=brl(ent);
+  document.getElementById('ssai').textContent=brl(sai);
+  const se=document.getElementById('ssal');se.textContent=brl(sal);se.style.color=sal>=0?'var(--gr)':'var(--rd)';
+  const body=document.getElementById('txbody');
+  if(!fl.length){body.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--tx3)">Nenhum lançamento encontrado</td></tr>`;
+  }else{
+    body.innerHTML=fl.map(t=>{
+      const ri=S.transactions.indexOf(t);
+      const badge=t.tipo==='entrada'?`<span class="badge bg"><i class="fa-solid fa-arrow-up"></i>Entrada</span>`:`<span class="badge br"><i class="fa-solid fa-arrow-down"></i>Saída</span>`;
+      return`<tr>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--tx2)">${fmtD(t.date)}</td>
+        <td><div style="font-weight:700;font-size:12.5px">${t.cliente||t.desc||'—'}</div>${t.desc&&t.cliente&&t.cliente!==t.desc?`<div style="font-size:10.5px;color:var(--tx3)">${t.desc}</div>`:''}</td>
+        <td><span class="badge bt" style="font-size:10.5px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.categoria.length>35?t.categoria.slice(0,35)+'…':t.categoria}</span></td>
+        <td style="font-size:11.5px;color:var(--tx2)">${t.banco}</td>
+        <td class="c">${badge}</td>
+        <td class="r" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${t.tipo==='entrada'?'var(--gr)':'var(--rd)'}">${t.tipo==='entrada'?'+':'-'} ${brl(t.valor)}</td>
+        <td class="c"><button onclick="askDel(${ri})" style="background:none;border:none;cursor:pointer;color:var(--tx3);padding:4px 8px;border-radius:6px;transition:all .15s" onmouseover="this.style.color='var(--rd)';this.style.background='rgba(239,68,68,.1)'" onmouseout="this.style.color='var(--tx3)';this.style.background='none'"><i class="fa-solid fa-trash-can"></i></button></td>
+      </tr>`;
+    }).join('');
+  }
+  const cs=document.getElementById('fcat');
+  if(cs){const cv=cs.value;const acs=[...new Set(S.transactions.map(t=>t.categoria))].sort();cs.innerHTML='<option value="">Categorias</option>'+acs.map(c=>`<option value="${c}"${c===cv?' selected':''}>${c}</option>`).join('');}
+}
+
+function clearF(){['fsearch','fmes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});['ftipo','fcat','fbanco'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});renderTx();}
+
+function renderContas(){
+  const mk=(items,col)=>items.map(i=>`<div class="pci"><div class="pcd" style="background:${col}"></div>${i}</div>`).join('');
+  document.getElementById('pc-rec').innerHTML=mk(PLANO.entrada,'var(--teal)');
+  document.getElementById('pc-desp').innerHTML=mk(PLANO.saida,'var(--rd)');
+}
+
+// ---- SYNC COM SHEETS ----
+function parseBRDate(s){if(!s)return null;const m=s.toString().trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);if(!m)return null;let[,d,mo,y]=m;if(y.length===2)y='20'+y;return y+'-'+mo.padStart(2,'0')+'-'+d.padStart(2,'0');}
+function parseBRVal(s){if(!s)return 0;const v=parseFloat(s.toString().replace(/[^0-9,.-]/g,'').replace(/\./g,'').replace(',','.'));return isNaN(v)?0:Math.abs(v);}
+function parseLine(line){const cols=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){inQ=!inQ;continue;}if(c===','&&!inQ){cols.push(cur.trim());cur='';continue;}cur+=c;}cols.push(cur.trim());return cols;}
+
+async function doSync(){
+  const btn=document.getElementById('sbtn');
+  const ind=document.getElementById('sind');
+  btn.disabled=true;
+  btn.innerHTML='<i class="fa-solid fa-rotate fa-spin"></i>Buscando...';
+  ind.innerHTML='<i class="fa-solid fa-rotate fa-spin" style="font-size:7px;color:var(--teal)"></i><span>Sincronizando...</span>';
+  try{
+    const url='https://docs.google.com/spreadsheets/d/e/2PACX-1vRnftjwt9OpKv0FKRNM_fsEBXkbuu_c_6EPevcInSp3Li4-Be3krIpw-qpBxvuXfu-Q2IfCrEAiiH9r/pub?gid=1614333558&single=true&output=csv';
+    const resp=await fetch(url);
+    if(!resp.ok)throw new Error('HTTP '+resp.status+' — verifique se a planilha ainda está publicada');
+    const text=await resp.text();
+    const lines=text.split(/
+?
+/).filter(l=>l.trim());
+    if(lines.length<2)throw new Error('Planilha sem dados');
+    const txs=[];
+    for(let i=1;i<lines.length;i++){
+      const r=parseLine(lines[i]);
+      if(r.length<5)continue;
+      const date=parseBRDate(r[0]);
+      const valor=parseBRVal(r[5]||r[4]);
+      if(!date||!valor)continue;
+      const tipo=(r[1]||'').toLowerCase().trim()==='entrada'?'entrada':'saida';
+      txs.push({id:'sh'+i,date,tipo,categoria:r[2]||'',banco:r[3]||'Inter PJ',cliente:r[4]||'—',desc:'',valor,_src:'sheets'});
+    }
+    if(!txs.length)throw new Error('Nenhum lançamento válido — verifique o formato da planilha');
+    const local=S.transactions.filter(t=>t._src==='local');
+    S.transactions=[...txs,...local].sort((a,b)=>b.date.localeCompare(a.date));
+    save();
+    const ts=new Date().toLocaleString('pt-BR');
+    localStorage.setItem('ps_sync',ts);
+    ind.innerHTML='<i class="fa-solid fa-circle-check" style="font-size:7px;color:var(--gr)"></i><span>'+ts+' · '+txs.length+' lançamentos</span>';
+    toast(txs.length+' lançamentos importados do Sheets.');
+    runAll();
+  }catch(e){
+    const ts=localStorage.getItem('ps_sync');
+    ind.innerHTML='<i class="fa-solid fa-triangle-exclamation" style="font-size:7px;color:var(--am)"></i><span>'+e.message+'</span>';
+    toast('Sync falhou: '+e.message,'e');
+  }finally{
+    btn.disabled=false;
+    btn.innerHTML='<i class="fa-solid fa-rotate"></i>Sync Sheets';
+  }
+}
+
+function runAll(){
+  renderDash();
+  const at=document.querySelector('.tab.active');if(!at)return;
+  const id=at.id.replace('tab-','');
+  const r={lancamentos:renderTx,metas:renderMetas,dre:renderDRE,contas:renderContas,comparativos:renderComp,graficos:renderGraficos};
+  if(r[id])r[id]();
+}
+
+window.onload=function(){
+  document.getElementById('ld').value=new Date().toISOString().split('T')[0];
+  document.getElementById('fmes').value=new Date().toISOString().slice(0,7);
+  updCat();runAll();
+  const ts=localStorage.getItem('ps_sync');
+  if(ts){const ind=document.getElementById('sind');if(ind)ind.innerHTML=`<i class="fa-solid fa-circle-check" style="font-size:7px;color:var(--gr)"></i><span>${ts}</span>`;}
+};
+</script>
+</body>
+</html>
